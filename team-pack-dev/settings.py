@@ -1,22 +1,9 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '2!#*(ag9k=bjv@nrp@lu^qm0i^d921yz_jzl1r55=k*!)!qjz6'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['aggregated-watch-app.herokuapp.com', '127.0.0.1']
-
-
-# Application definition
+ALLOWED_HOSTS = ['team-pack-dev.herokuapp.com', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,6 +23,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
+    'scraping',
     'articles'
 ]
 
@@ -53,7 +41,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'aggregated-watch-app.urls'
+ROOT_URLCONF = 'team-pack-dev.urls'
 
 TEMPLATES = [
     {
@@ -71,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'aggregated-watch-app.wsgi.application'
+WSGI_APPLICATION = 'team-pack-dev.wsgi.application'
 
 
 # Database
@@ -89,37 +77,17 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -131,8 +99,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 SITE_ID = 1
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
@@ -143,9 +109,11 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
+    'team-pack-dev.herokuapp.com',
+    '127.0.0.1:8000'
 )
 
-CSRF_COOKIE_NAME = "csrftoken"
+# CSRF_COOKIE_NAME = "csrftoken"
 
 # Login Parameters
 ACCOUNT_EMAIL_VERIFICATION = 'none'
