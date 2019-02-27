@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from scraping.models import Car
 from scraping.api.serializers import CarSerializer
-from scraping.scraper.master_scraper import scrap
+from scraping.scraper.master_scraper import (scrap, scrapAllWebsites)
 
 
 class CarViewSet(viewsets.ModelViewSet):
@@ -29,7 +29,7 @@ def scrap_websites(request):
     """ 
     Calls the process for scraping the websites
     """
-    return Response(scrap())
+    return Response(scrapAllWebsites())
 
     # if request.method == 'GET':
     #     cars = Car.objects.all()
