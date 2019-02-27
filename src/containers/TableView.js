@@ -57,7 +57,7 @@ function onChange(pagination, filters, sorter) {
 
 const TableView = (props) => {
   return (
-    <Table columns={columns} dataSource={carsData} onChange={onChange} />);
+    <Table columns={columns} dataSource={props.data} onChange={onChange} />);
 }
 
 export default TableView;

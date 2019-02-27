@@ -5,4 +5,5 @@ from scraping.models import Car
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
-        fields = ('id', 'price', 'km_number', 'brand')
+        # fields = ('id', 'price', 'km_number', 'brand', 'car_type', )
+        exclude = ['created']
