@@ -11,6 +11,39 @@ def joinString(w, list):
 
 
 def parseStrToDate(str):
-    print("Date " + str)
-    print(datetime.strptime(str, '%d/%m/%Y'))
     datetime.strptime(str, '%d/%m/%Y')
+
+
+def cleanInt(str):
+    '''
+    Removes all non numeric characters from string, concatenates then parse the whole number to int
+    '''
+    clean_int_list = filter(lambda x: x.isdigit(), str)
+    return int("".join(clean_int_list))
+
+
+def getNthElem(elem, index, separator):
+    return elem.get_text().split(separator)[index]
+
+
+def getBreadCrum(elem, index):
+    tmp = elem.contents[index].get_text()
+    if tmp[-1] == "/":
+        return tmp[:-1]
+    else:
+        return tmp
+
+
+def getKilometers(elem):
+    v = isInList(elem.contents, 3)
+    if v is not None:
+        return cleanInt(getNthElem(v, 1, '-'))
+    else:
+        return 0
+
+
+def isInList(l, index):
+    if index < len(l):
+        return l[index]
+    else:
+        return None
