@@ -47,3 +47,11 @@ def isInList(l, index):
         return l[index]
     else:
         return None
+
+
+def getChild(arg, index):
+    tmp_list = arg.contents
+    if isInList(tmp_list, index) is not None:
+        return tmp_list[index].strip()
+    else:
+        return None
