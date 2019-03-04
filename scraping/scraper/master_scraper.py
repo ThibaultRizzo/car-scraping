@@ -36,7 +36,7 @@ def scrapAllWebsites():
         for url in urlList:
             # Get the Car class from each url
             car = getCarFromUrl(url, vendor.vendor_dictionary)
-            # car.save()
+            car.save()
         print("Vendor %s has %d urls" % (vendor, len(urlList)))
 
 
