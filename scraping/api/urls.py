@@ -1,6 +1,16 @@
-from scraping.api.views import CarViewSet
+from scraping.api import views
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
-router.register(r'', CarViewSet, base_name='cars')
-urlpatterns = router.urls
+router.register(r'cars', views.CarViewSet, base_name='cars')
+# urlpatterns = router.urls
+
+
+urlpatterns = [
+    path('scrap/', views.scrap_websites),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns += router.urls
