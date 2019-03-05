@@ -20,13 +20,14 @@ def scrap():
 
 
 vendorList = (
-    Vendor('lacentrale', 'https://www.lacentrale.fr','https://www.lacentrale.fr/listing?page=%d', 0, 'linkAd'),
-    Vendor('aramisAuto', 'https://www.aramisauto.com','https://www.aramisauto.com/achat/page=%d', 0, 'vehicle-info-link'),
+    Vendor('goodbuyauto.it','https://www.goodbuyauto.it','https://www.goodbuyauto.it/compra?page=%d', 1, 'carsmall_container catalog', lambda lambdaClass,soup: list(map(lambda arg: arg.find('a'), soup.find_all(class_=lambdaClass)))),
+    #Vendor('lacentrale', 'https://www.lacentrale.fr','https://www.lacentrale.fr/listing?page=%d', 0, 'linkAd',lambda arg, soup: soup.find_all('a', class_=arg )),
+    #Vendor('aramisAuto', 'https://www.aramisauto.com','https://www.aramisauto.com/achat/page=%d', 0, 'vehicle-info-link'),
     # Vendor('carvana', 'https://www.carvana.com', 'https://www.carvana.com/cars?page=%d',
     #        1, 'SingleClickLink__StyledLink-sc-1455iy6-0 cnENNQ'),
 )
 
-URL_PAGE_LIMIT = 1
+URL_PAGE_LIMIT = 2
 
 http = "http://3.17.154.4:8080"
 https = "https://3.17.154.4:8080"
@@ -62,8 +63,7 @@ def getListOfAllUrls(vendorInfo):
         print(vendorInfo.searchUrl % it)
         r = requests.get(vendorInfo.searchUrl % it)
         soup = BeautifulSoup(r.text, 'html.parser')
-        tmpList = map(lambda arg: vendorInfo.baseUrl + arg['href'],
-                      soup.find_all('a', class_=vendorInfo.hrefClass))
+        tmpList = map(lambda arg: vendorInfo.baseUrl + arg['href'],vendorInfo.hrefLambda(vendorInfo.hrefClass, soup))
         if tmpList is None:
             break
         urlList += tmpList

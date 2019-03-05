@@ -21,13 +21,6 @@ def cleanInt(str):
     clean_int_list = filter(lambda x: x.isdigit(), str)
     return int("".join(clean_int_list))
 
-def CleanBrand(str):
-    '''
-    Removes the word occasion to the Car Brand
-    '''
-    clean_brand = filter(lambda x: x.replace('occasion',''), str)
-    return clean_brand.strip()
-
 def getNthElem(elem, index, separator):
     return elem.get_text().split(separator)[index]
 
@@ -56,6 +49,7 @@ def isInList(l, index):
 
 
 def getChild(arg, index):
+    print (arg)
     tmp_list = arg.contents
     if isInList(tmp_list, index) is not None:
         return tmp_list[index].strip()

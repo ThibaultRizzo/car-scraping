@@ -1,7 +1,7 @@
 # from scraping.scraper.models2 import ParsingRule
 # from scraping.models import Car
 from .utils import (parseStrToDate, cleanInt, getNthElem,
-                    getBreadCrum, getKilometers, getChild, CleanBrand)
+                    getBreadCrum, getKilometers, getChild)
 from enum import Enum
 
 
@@ -11,6 +11,7 @@ class RuleName(Enum):
     PREVIOUS_ELEM = 'PREVIOUS_ELEM',
     AS_TAG = 'AS_TAG',
     AS_TEXT = 'AS_TEXT',
+    AS_INPUT = 'AS_INPUT',
     NONE = 'NONE'
 
 
@@ -36,6 +37,9 @@ class ParsingRule:
             return self.custom_lambda(elem)
         elif self.ruleName == RuleName.AS_TEXT:
             elem = soup.find(self.tag_, class_=self.class_,string=self.id_).find_next()
+            return self.custom_lambda(elem)
+        elif self.ruleName == RuleName.AS_INPUT:
+            elem = soup.find(self.tag_,{'name':self.class_,'type':self.id_})['value']
             return self.custom_lambda(elem)
         elif self.ruleName == RuleName.NONE:
             return
@@ -73,18 +77,35 @@ vendorDict = {
     },
     'lacentrale': {
         'price': ParsingRule(None, 'cbm-price__newPrice', None, lambda arg: cleanInt(arg.get_text()), RuleName.AS_TAG),
-        'km_number': ParsingRule('Kilométrage : ', 'optionLabel', 'span', lambda arg: cleanInt(arg.get_text()), RuleName.AS_TEXT),
-        'brand': ParsingRule(None, 'cbm-breadcrumb__list', None, lambda arg: CleanBrand(getBreadCrum(arg, 2)), RuleName.AS_TAG),
-        'model': ParsingRule(None, 'cbm-breadcrumb__list', None, lambda arg: getBreadCrum(arg, 3), RuleName.AS_TAG),
-        'car_type': ParsingRule(None, 'cbm-breadcrumb__list', None, lambda arg: getBreadCrum(arg, 3), RuleName.AS_TAG),
+        'km_number': ParsingRule(None, 'g8qpqa-0 iYKarG', 'span', lambda arg: CleanInt(getChild(arg, 2)), RuleName.AS_TEXT),
+        'brand': ParsingRule('hidden', 'brand', 'input', lambda arg: arg.lower(), RuleName.AS_INPUT),
+        'model': ParsingRule('hidden', 'model', 'input', lambda arg: arg.lower(), RuleName.AS_INPUT),
+        'car_type': ParsingRule('hidden', 'version', 'input', lambda arg: arg.lower(), RuleName.AS_INPUT),
         'reg_date': ParsingRule('Mise en circulation : ', 'optionLabel', 'span', lambda arg: parseStrToDate(arg.get_text()), RuleName.AS_TEXT),
         'gear_box': ParsingRule('Boîte de vitesse : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
         'gear_number': ParsingRule(None, None, None, lambda arg: arg.contents[0].strip(), RuleName.NONE),
-        'motor_type': ParsingRule('Version : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
+        'motor_type': ParsingRule('Puissance din : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
         'petrol_type': ParsingRule('Énergie : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
         'color': ParsingRule('Couleur extérieure : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
         'doors_number': ParsingRule('Nombre de portes : ', 'optionLabel', 'span', lambda arg: arg.get_text(), RuleName.AS_TEXT),
         'vendor_ref':  ParsingRule(None, 'cbm-btn--1 cbm-btn__sellerLoc', None, lambda arg: arg['data-classified-id'], RuleName.AS_TAG),
+        'owner_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'reg_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+    },
+    'goodbuyauto.it': {
+        'price': ParsingRule(None, 'text-head-2 text-weight-semibold', 'span', lambda arg: cleanInt(arg.get_text()), RuleName.AS_TAG),
+        'km_number': ParsingRule('Chilometri', 't-small', 'p', lambda arg: cleanInt(arg.get_text()), RuleName.AS_TEXT),
+        'brand': ParsingRule(None, 'text-weight-light car-text visible-xs', 'h1', lambda arg: arg.get_text(), RuleName.AS_TAG),
+        'model': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'car_type': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'reg_date': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'gear_box': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'gear_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'motor_type': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'petrol_type': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'color': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'doors_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
+        'vendor_ref':  ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
         'owner_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
         'reg_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: arg.contents[0].strip(), RuleName.NONE),
     }
