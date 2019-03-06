@@ -22,3 +22,4 @@ When installing a new library: always do the following:
     <ol>After creating/activating the environment, pip install <package_name></ol>
     <ol>Save the new dependency in requirements.txt: pip freeze > requirements.txt</ol>
 </li>
+
