@@ -10,6 +10,7 @@ router.register(r'cars', views.CarViewSet, base_name='cars')
 
 urlpatterns = [
     path('scrap/', views.scrap_websites),
+    path('vendors/', views.getVendorTreemap),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

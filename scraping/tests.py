@@ -1,3 +1,10 @@
+
+from selenium.webdriver.common.proxy import Proxy, ProxyType
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
 from itertools import cycle
 from lxml.html import fromstring
 from datetime import datetime
@@ -15,11 +22,20 @@ proxies = {
 }
 URL = "https://www.carvana.com/cars?page=10"
 url_test = 'https://httpbin.org/ip'
+
+url_soup = 'https://www.goodbuyauto.it/compra?page=20'
+r = requests.get(url_soup, proxies=proxies)
+soup = BeautifulSoup(r.text, 'html.parser')
+el = soup.find_all(class_="carsmall_container catalog")[0].find('a')['href']
+list_el = map(lambda arg: arg.find('a')['href'], soup.find_all(
+    class_="carsmall_container catalog"))
+
+print(list(list_el))
+
 # response = requests.get(URL, proxies=proxies)
 # print(response)
 # r = requests.get(URL, proxies=proxies)
 # soup = BeautifulSoup(r.text, 'html.parser')
-
 
 # el = soup.find(text=re.compile("Mise en circulation")
 #                ).findNext('span').get_text()
@@ -27,13 +43,9 @@ url_test = 'https://httpbin.org/ip'
 # el = soup.find("span", class_="far far-boite").find_next().contents[0]
 # el = soup.find('span', class_='far far-boite').find_next().contents[2].strip()
 
-
 # print(filterel(' ', ''))
 # print(soup)
 # print(int("".join(filter(lambda x: x.isdigit(), el))))
-
-req = requests.get(URL).text
-print(req)
 
 
 def get_proxies():
@@ -48,22 +60,88 @@ def get_proxies():
             proxy = ":".join([i.xpath('.//td[1]/text()')[0],
                               i.xpath('.//td[2]/text()')[0]])
             proxies.add(proxy)
+            print(proxy)
     return proxies
 
+    # prox = Proxy()
+    # prox.proxy_type = ProxyType.MANUAL
+    # prox.http_proxy = "35.247.109.63:80"
+    # prox.socks_proxy = "ip_addr:port"
+    # prox.ssl_proxy = "ip_addr:port"
 
-# proxies = get_proxies()
-# proxy_pool = cycle(proxies)
-# # url = 'https://httpbin.org/ip'
-# for i in range(1, 11):
-#     # Get a proxy from the pool
-#     proxy = next(proxy_pool)
-#     print(proxy)
-#     print("Request #%d" % i)
-#     try:
-#         response = requests.get(URL, proxies={"http": proxy, "https": proxy})
-#         print(list(response))
-#         print(response.json())
-#     except:
-#         # Most free proxies will often get connection errors. You will have retry the entire request using another proxy to work.
-#         # We will just skip retries as its beyond the scope of this tutorial and we are only downloading a single url
-#         print("Skipping. Connnection error")
+    # capabilities = webdriver.DesiredCapabilities.CHROME
+    # prox.add_to_capabilities(capabilities)
+
+    # driver = webdriver.Chrome(desired_capabilities=capabilities)
+
+    # headers = {'Host': 'www.vignanam.org',
+    #            'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/7.0.540.0 Safari/534.10',
+    #            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    #            'Accept-Language': 'en-US,en;q=0.5',
+    #            'Accept-Encoding': 'gzip, deflate',
+    #            'Connection': 'keep-alive',
+    #            'Cookie': 'visid_incap_1642409=B+YoelHCSKKN5z/Phs0zXCsF9VsAAAAAQUIPAAAAAACXaWvcNDXdMzcOky/SvffB; incap_ses'
+    #                      '_715_1642409=kyFvSyJuuBVpNuh+aTHsCSsF9VsAAAAAKV6TIWTPSZmb+mOZWeuNHA==',
+    #            'Upgrade-Insecure-Requests': '1'}
+
+    # session = IncapSession()
+    # headers = {
+    #     'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+    # }
+    # response = session.get(URL, headers=headers, bypass_crack=True)
+
+    # print(response.text)
+
+    def getProxyUrl():
+        proxies = get_proxies()
+        proxy_pool = cycle(proxies)
+        # # url = 'https://httpbin.org/ip'
+        for i in range(1, 11):
+            # Get a proxy from the pool
+            proxy = next(proxy_pool)
+            print(proxy)
+            print("Request #%d" % i)
+            try:
+                response = requests.get(URL, headers=headers, proxies={
+                                        "http": proxy, "https": proxy})
+                print(response)
+            except:
+                # Most free proxies will often get connection errors. You will have retry the entire request using another proxy to work.
+                # We will just skip retries as its beyond the scope of this tutorial and we are only downloading a single url
+                print("Skipping. Connnection error")
+
+    def setupSelenium(proxy):
+        # PROXY = "%s:%d" % (ip, port)  # IP:PORT or HOST:PORT
+        PROXY = proxy
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--proxy-server=%s' % PROXY)
+
+        chrome = webdriver.Chrome(options=chrome_options)
+        chrome.get(URL)
+
+    def setupProxy(proxy):
+        prox = Proxy()
+        prox.proxy_type = ProxyType.MANUAL
+        prox.http_proxy = proxy
+        prox.socks_proxy = proxy
+        prox.ssl_proxy = proxy
+
+        capabilities = webdriver.DesiredCapabilities.CHROME
+        prox.add_to_capabilities(capabilities)
+
+        return webdriver.Chrome(desired_capabilities=capabilities)
+
+    # def testSelenium():
+
+    #     driver = webdriver.Chrome()
+    #     wait = WebDriverWait(driver, 10)
+    #     driver.get(URL)
+
+    #     for item in wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".company-details"))):
+    #         company_name = item.find_element_by_id("company-name-1").text
+    #         ceo_name = item.find_element_by_id("ceo-name-1").text
+    #         print(company_name, ceo_name)
+
+    #     driver.quit()
+
+    # testSelenium()

@@ -49,15 +49,17 @@ def scrapAllWebsites():
     for vendor in vendorList:
         # Get list of all car URLs
         urlList = getListOfAllUrls(vendor)
-        print(list(urlList))
         with concurrent.futures.ProcessPoolExecutor(max_workers=20) as executor:
             # Iterates over list of urls
+            carList = []
             for url in urlList:
-                executor.submit(getAndSaveCar, url)
+                carList.append(getCarFromUrl(url, vendor.vendor_dictionary))
+                # executor.submit(getAndSaveCar, url, vendor)
+            Car.objects.bulk_create(carList)
             print("Vendor %s has %d urls" % (vendor.name, len(urlList)))
 
 
-def getAndSaveCar(url):
+def getAndSaveCar(url, vendor):
     # Get the Car class from each url
     car = getCarFromUrl(url, vendor.vendor_dictionary)
     car.save()

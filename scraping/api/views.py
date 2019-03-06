@@ -42,3 +42,28 @@ def scrap_websites(request):
     #         serializer.save()
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def getVendorTreemap(request):
+    """
+    Returns a JSON-like object to be used to create a treemap
+    """
+    vendor = 'Aramisauto'
+    model_list = Car.objects.get_all_model(vendor)
+    vendor_dict = {}
+    vendor_list = []
+    for model_dict in model_list:
+        brand = model_dict["brand"]
+        model_dict.pop("brand")
+        model_dict["name"] = model_dict.pop("model")
+        model_dict["size"] = Car.objects.get_number_of_model(
+            model_dict["name"])
+
+        if brand in vendor_dict.keys():
+            vendor_dict[brand].append(model_dict)
+        else:
+            vendor_dict[brand] = [model_dict]
+    for key, value in vendor_dict.items():
+        vendor_list.append({"name": key, "children": value})
+    return Response({"name": vendor, "children": vendor_list})

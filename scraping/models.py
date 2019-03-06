@@ -1,18 +1,19 @@
 from django.db import models
-
-# Create your models here.
-
-
-class TestCar(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
-    content = models.CharField(max_length=100, blank=True, default='')
-
-    class Meta:
-        ordering = ('created',)
+from django.db.transaction import atomic
 
 
 class CarManager(models.Manager):
+    def get_all_model(self, vendor):
+        return Car.objects.filter(vendor=vendor).order_by('model').values('model', 'brand').distinct()
+
+    def get_number_of_model(self, model):
+        return Car.objects.filter(model=model).count()
+
+    @atomic
+    def save_as_batch(queryset):
+        for item in queryset:
+            item.save()
+
     def delete_everything(self):
         Car.objects.all().delete()
 

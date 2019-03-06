@@ -10,10 +10,9 @@ class CarRankingView extends React.Component {
 
     componentDidMount() {
         // Get the car data from server
-        axios.get(`http://127.0.0.1:8000/car-api/`)
+        axios.get(`http://127.0.0.1:8000/car-api/cars/`)
             .then(res => {
                 this.setState({ cars: res.data });
-                console.dir(res);
             })
     }
 
