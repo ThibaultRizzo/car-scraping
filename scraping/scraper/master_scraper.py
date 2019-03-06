@@ -18,7 +18,7 @@ vendorList = (
     Vendor('goodbuyauto.it', 'https://www.goodbuyauto.it', 'https://www.goodbuyauto.it/compra?page=%d',
            1, lambda soup: map(lambda arg: arg.find('a'), soup.find_all(
                class_="carsmall_container catalog"))),
-    Vendor('lacentrale', 'https://www.lacentrale.fr', 'https://www.lacentrale.fr/listing?categories=80%2C50%2C44%2C45%2C46%2C43%2C41_42%2C40%2C47&customerType=PRO&mileageMax=250000&options=&yearMin=2010&makesModelsCommercialNames=&page=%d',
+    Vendor('lacentrale', 'https://www.lacentrale.fr', 'https://www.lacentrale.fr/listing?page=%d',
            0, lambda soup: soup.find_all('a', class_='linkAd')),
     Vendor('aramisAuto', 'https://www.aramisauto.com',
            'https://www.aramisauto.com/achat/page=%d', 0, lambda soup: soup.find_all('a', class_='vehicle-info-link')),
