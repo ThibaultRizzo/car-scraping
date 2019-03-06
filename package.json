@@ -5,11 +5,15 @@
   "dependencies": {
     "antd": "^3.13.2",
     "axios": "^0.18.0",
+    "d3": "^5.9.1",
     "react": "^16.8.1",
+    "react-chartjs-2": "^2.7.4",
+    "react-d3-treemap": "^1.0.14",
     "react-dom": "^16.8.1",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
+    "recharts": "^1.5.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
@@ -20,6 +24,7 @@
     "eject": "react-scripts eject",
     "postinstall": "npm run build"
   },
+  "proxy": "http://127.0.0.1:8000",
   "engines": {
     "node": "10.15.1",
     "npm": "6.4.1"
