@@ -6,11 +6,14 @@ class CarManager(models.Manager):
     def get_all_model(self, vendor):
         return Car.objects.filter(vendor=vendor).order_by('model').values('model', 'brand').distinct()
 
+    def get_car_count(self):
+        return Car.objects.count()
+
     def get_number_of_model(self, model):
         return Car.objects.filter(model=model).count()
 
     @atomic
-    def save_as_batch(queryset):
+    def save_as_batch(self, queryset):
         for item in queryset:
             item.save()
 
@@ -31,7 +34,7 @@ class Car(models.Model):
     vendor_ref = models.CharField(
         max_length=50, unique=True, primary_key=True)
     price = models.DecimalField(max_digits=20, decimal_places=2)
-    km_number = models.IntegerField()
+    km_number = models.IntegerField(default=0)
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     car_type = models.CharField(max_length=50)
@@ -46,7 +49,7 @@ class Car(models.Model):
     vendor_link = models.CharField(max_length=100, null=True)
     owner_number = models.IntegerField(null=True)
     reg_number = models.CharField(max_length=10, null=True, unique=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now=True)
     objects = CarManager()
 
     class Meta:

@@ -6,10 +6,10 @@ from scraping.scraper.app_dictionaries import getDictionary
 
 
 class Vendor:
-    def __init__(self, name, baseUrl, searchUrl, basePageNb, hrefClass):
+    def __init__(self, name, baseUrl, searchUrl, basePageNb, hrefLambda):
         self.name = name
         self.baseUrl = baseUrl
         self.searchUrl = searchUrl
         self.basePageNb = basePageNb
-        self.hrefClass = hrefClass
+        self.hrefLambda = hrefLambda
         self.vendor_dictionary = getDictionary(name)

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from scraping.models import Car
 from scraping.api.serializers import CarSerializer
-from scraping.scraper.master_scraper import (scrap, scrapAllWebsites)
+from scraping.scraper.master_scraper import scrapAllWebsites
 
 
 class CarViewSet(viewsets.ModelViewSet):
@@ -67,3 +67,8 @@ def getVendorTreemap(request):
     for key, value in vendor_dict.items():
         vendor_list.append({"name": key, "children": value})
     return Response({"name": vendor, "children": vendor_list})
+
+
+@api_view(['GET'])
+def getVendorCount(request):
+    return Response(Car.objects.get_car_count())
