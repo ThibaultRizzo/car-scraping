@@ -24,6 +24,7 @@
     "eject": "react-scripts eject",
     "postinstall": "npm run build"
   },
+  "proxy": "http://127.0.0.1:8000",
   "engines": {
     "node": "10.15.1",
     "npm": "6.4.1"

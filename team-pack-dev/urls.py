@@ -10,6 +10,6 @@ urlpatterns = [
     path('api/', include('articles.api.urls')),
     path('car-api/', include('scraping.api.urls')),
     path('admin/', admin.site.urls),
-    re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
-    # re_path(r'^', ReactAppView.as_view()),
+    re_path(r'^.*', ReactAppView.as_view()),  # Base URL to load React App
+    # re_path(r'^.*', TemplateView.as_view(template_name='index.html')),
 ]
