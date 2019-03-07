@@ -21,7 +21,7 @@ vendorList = (
     Vendor('lacentrale', 'https://www.lacentrale.fr', 'https://www.lacentrale.fr/listing?page=%d',
            0, lambda soup: soup.find_all('a', class_='linkAd')),
     Vendor('aramisAuto', 'https://www.aramisauto.com',
-           'https://www.aramisauto.com/achat/page=%d', 0, lambda soup: soup.find_all('a', class_='vehicle-info-link')),
+           'https://www.aramisauto.com/achat/page=%d', 0, lambda soup: soup.find_all('a', class_='real-link vehicle-info-link')),
     # Vendor('carvana', 'https://www.carvana.com', 'https://www.carvana.com/cars?page=%d',
     #        1, 'SingleClickLink__StyledLink-sc-1455iy6-0 cnENNQ'),
 )
@@ -44,11 +44,13 @@ def scrapAllWebsites():
         with concurrent.futures.ProcessPoolExecutor(max_workers=20) as executor:
             # Iterates over list of urls
             carList = []
+            i=1 #count 
             for url in urlList:
-                carList.append(getCarFromUrl(url, vendor.vendor_dictionary))
+                car_scraped = getCarFromUrl(url, vendor)
+                carList.append(car_scraped)
                 # executor.submit(getAndSaveCar, url, vendor)
+                i+=1
             Car.objects.save_as_batch(carList)
-            print("Vendor %s has %d urls" % (vendor.name, len(urlList)))
 
 
 def getAndSaveCar(url, vendor):
@@ -70,11 +72,12 @@ def getListOfAllUrls(vendorInfo):
             break
         urlList += tmpList
         it += 1
-    return urlList
+    return set(urlList)
 
 
-def getCarFromUrl(url, vendor_dict):
+def getCarFromUrl(url, vendor):
     # Scrap the URL
+    vendor_dict = vendor.vendor_dictionary
     try:
         r = requests.get(url)
         soup = BeautifulSoup(r.text, 'html.parser')
@@ -90,6 +93,7 @@ def getCarFromUrl(url, vendor_dict):
                     print("The key %s was not found on url %s" % (key, url))
                 setattr(scrapedCar, key, value)
         scrapedCar.vendor_link = url
+        scrapedCar.vendor = vendor.name
         return scrapedCar
     # If anything went wrong, we log and move on
     except:

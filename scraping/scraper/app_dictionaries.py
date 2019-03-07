@@ -54,7 +54,6 @@ vendorDict = {
         'brand': ParsingRule("wo-breadcrumbs", 'breadcrumb', None, lambda arg: getBreadCrum(arg, 2), RuleName.AS_TAG),
         'model': ParsingRule("wo-breadcrumbs", 'breadcrumb', None, lambda arg: getBreadCrum(arg, 3), RuleName.AS_TAG),
         'car_type': ParsingRule("wo-breadcrumbs", 'breadcrumb', None, lambda arg: getBreadCrum(arg, 4), RuleName.AS_TAG),
-        'vendor': ParsingRule("wo-breadcrumbs", 'breadcrumb', None, lambda arg: getBreadCrum(arg, 0), RuleName.AS_TAG),
         'reg_date': ParsingRule(None, 'far far-route', 'span', lambda date: parseStrToDate(date.contents[2].strip()), RuleName.NEXT_ELEM),
         'gear_box': ParsingRule(None, 'far far-boite', 'span', lambda arg: getChild(arg, 0), RuleName.NEXT_ELEM),
         'gear_number': ParsingRule(None, 'far far-boite', 'span', lambda arg: getChild(arg, 2), RuleName.NEXT_ELEM),
@@ -66,13 +65,6 @@ vendorDict = {
         'vendor_ref': ParsingRule(None, 'cta-favorite btn-favorite btn-favorite--disable', None, lambda arg: arg['data-vehicle-id'], RuleName.AS_TAG),
         'owner_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: getChild(arg, 0), RuleName.AS_TAG),
         'reg_number': ParsingRule(None, 'far far-motorisation', 'span', lambda arg: getChild(arg, 0), RuleName.NONE),
-    },
-    'carvana': {
-        # 'price': ParsingRule("span", 'price', None, lambda w: int(w[:-1].replace(" ", "")), URL),
-        # 'km_number': ParsingRule("span", 'item-value', 'Kilométrage', lambda w: int(w[:-2]), URL),
-        # 'brand': ParsingRule("span", 'model', None, lambda w: w + '', URL),
-        # 'model': ParsingRule("span", 'modelExtend', None, lambda w: w + '', URL),
-        # 'reg_date': ParsingRule("span", 'item-value', 'Mise en circulation', parseStrToDate, URL),
     },
     'lacentrale': {
         'price': ParsingRule(None, 'cbm-price__newPrice', None, lambda arg: cleanInt(arg.get_text()), RuleName.AS_TAG),
