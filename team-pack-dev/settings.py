@@ -1,6 +1,6 @@
 import os
-from decouple import config, Csv
-# import dj_database_url
+# from decouple import config, Csv
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -8,9 +8,9 @@ SECRET_KEY = '2!#*(ag9k=bjv@nrp@lu^qm0i^d921yz_jzl1r55=k*!)!qjz6'
 DEBUG = True
 ALLOWED_HOSTS = ['team-pack-dev.herokuapp.com', '127.0.0.1']
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+# SECRET_KEY = config('SECRET_KEY')
+# DEBUG = config('DEBUG', cast=bool)
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,22 +69,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'team-pack-dev.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': config('DATABASE_NAME'),
-    #     'USER': config('DATABASE_USER'),
-    #     'PASSWORD': '',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': config('DATABASE_NAME'),
+        # 'USER': config('DATABASE_USER'),
+        'NAME': 'car_scraping',
+        'USER': 'pack',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
