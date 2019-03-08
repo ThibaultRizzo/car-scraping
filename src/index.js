@@ -8,6 +8,9 @@ import thunk from 'redux-thunk';
 
 import reducer from './store/reducers/auth';
 
+import 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css';
+
 const composeEnhances = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducer, composeEnhances(

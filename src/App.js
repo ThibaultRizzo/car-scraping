@@ -6,6 +6,9 @@ import BaseRouter from './routes';
 import 'antd/dist/antd.css';
 import * as actions from './store/actions/auth';
 
+import { MatNavbar } from './containers/materialize/MatContainer';
+import './App.scss';
+
 class App extends Component {
 
   componentDidMount() {
@@ -15,11 +18,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Router>
+        {/* <Router>
           <CustomLayout {...this.props}>
             <BaseRouter />
           </CustomLayout>
-        </Router>
+        </Router> */}
+        <MatNavbar />
       </div>
     );
   }
