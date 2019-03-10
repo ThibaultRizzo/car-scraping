@@ -3,7 +3,7 @@ from django.db.transaction import atomic
 
 
 class CarManager(models.Manager):
-    def get_all_model(self, vendor):
+    def get_all_models(self, vendor):
         return Car.objects.filter(vendor=vendor).order_by('model').values('model', 'brand').distinct()
 
     def get_car_count(self):

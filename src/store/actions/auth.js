@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as actionsTypes from './actionTypes';
-import { BASE_BACKEND_URL } from '../../constants';
+import { BASE_URL } from '../../constants';
 
 export const authStart = () => {
     return {
@@ -41,7 +41,7 @@ export const checkAuthTimeout = expirationTime => {
 export const authLogin = (username, password) => {
     return dispatch => {
         dispatch(authStart());
-        axios.post(`${BASE_BACKEND_URL}/rest-auth/login/`, {
+        axios.post(`${BASE_URL}/rest-auth/login/`, {
             username: username,
             password: password
         })
@@ -62,7 +62,7 @@ export const authLogin = (username, password) => {
 export const authSignup = (username, email, password1, password2) => {
     return dispatch => {
         dispatch(authStart());
-        axios.post(`${BASE_BACKEND_URL}/rest-auth/registration/`, {
+        axios.post(`${BASE_URL}/rest-auth/registration/`, {
             username: username,
             email: email,
             password1: password1,

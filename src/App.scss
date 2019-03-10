@@ -1,0 +1,8 @@
+@import './variables';
+
+#root {
+    height: 100%;
+}
+
+$primary-color: color("red", "lighten-2") !default;
+$secondary-color: color("cyan", "lighten-1") !default;
