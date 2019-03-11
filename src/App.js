@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
 // import CustomLayout from './containers/Layout';
-// import BaseRouter from './routes';
+import BaseRouter from './routes';
 import 'antd/dist/antd.css';
 import * as actions from './store/actions/auth';
 
-import { MatNavbar, MatContent } from './containers/materialize/MatContainer';
+import MatLayout from './containers/materialize/MatLayout';
 import './App.scss';
 
 class App extends Component {
@@ -23,8 +23,12 @@ class App extends Component {
             <BaseRouter />
           </CustomLayout>
         </Router> */}
-        <MatNavbar />
-        <MatContent />
+        {/* <MatNavbar /> */}
+        <Router>
+          <MatLayout>
+            <BaseRouter />
+          </MatLayout>
+        </Router>
 
       </div>
     );
