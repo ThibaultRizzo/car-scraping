@@ -8,7 +8,7 @@ import './MatContainer.scss';
 
 import { Navbar, NavItem, Icon, Collection, CollectionItem } from 'react-materialize'
 import NumberHighlight from '../../components/NumberHighlight';
-import TreeMap from '../../components/data-visualisation/TreeMap';
+import VendorTreeMap from '../../components/data-visualisation/TreeMap';
 import BoxPlot from '../../components/data-visualisation/BoxPlot';
 
 const MatNavbar = (props) => {
@@ -45,7 +45,7 @@ class MatContainer extends React.Component {
         boxplot: []
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // axios.get(constants.NUMBERS_URL)
         //     .then(res => {
         //         this.setState({ numbers: res.data });
@@ -85,13 +85,21 @@ const MatNumberHighlightListView = ({ data, ...props }) => {
     );
 }
 
-const MatTreemapListView = ({ data, ...props }) => {
-    const treemapData = [{}];
+const MatTreemapListView = ({ data = [], ...props }) => {
+    console.dir(data);
+    // return (
+    // <div {...props}>
+    //     {data.map((treemap, id) => {
     return (
-        <div {...props}>
-            {treemapData.map((data, id) => <TreeMap treeData={data} key={"tr-" + id} />)}
-        </div>
-    );
+        <VendorTreeMap
+            {...props}
+            // key={"tr-" + id}
+            width="1000"
+            height="500"
+            data={data} />);
+    //     })}
+    // </div>
+    // );
 }
 
 const MatBoxPlotListView = ({ data, ...props }) => {

@@ -1,27 +1,11 @@
 import React from 'react';
 import * as d3 from 'd3';
-import axios from 'axios';
-import PropTypes from 'prop-types';
 
-export default class TreeMap extends React.Component {
-    state = {
-        data: []
-    }
-    static propTypes = {
-        width: PropTypes.string,
-        height: PropTypes.string
-    }
-    componentWillMount() {
-        axios.get(`http://127.0.0.1:8000/car-api/vendors/`)
-            .then(res => {
-                this.setState({ data: res.data });
-            });
-    }
-
-    drawTreemap = (data) => {
+const VendorTreeMap = ({ data, width, height }) => {
+    const drawTreemap = (data) => {
         let root = d3.hierarchy(data);
         let treemap = d3.treemap()
-            .size([this.props.width, this.props.height])
+            .size([width, height])
             .padding(4)
             .paddingOuter(10);
         root
@@ -31,20 +15,17 @@ export default class TreeMap extends React.Component {
         return root.descendants().map((d, id) => <Leaf key={'leaf' + id} d={d} />);
     }
 
-    render() {
-        const { width, height } = this.props;
-        return (
-            <svg
-                viewBox={`0,0,${width},${height}`}
-                style={{ width: '100%', height: 'auto', font: '20px sans-serif' }}
-                className="treemap-container"
-                width={width}
-                height={height}
-            >
-                {this.drawTreemap(this.state.data)}
-            </svg>
-        );
-    }
+    return (
+        <svg
+            viewBox={`0,0,${width},${height}`}
+            style={{ width: '100%', height: 'auto', font: '20px sans-serif' }}
+            className="treemap-container"
+            width={width}
+            height={height}
+        >
+            {data && drawTreemap(data)}
+        </svg>
+    );
 }
 
 
@@ -74,3 +55,5 @@ const Leaf = ({ d, key }) => {
         </g>
     );
 }
+
+export default VendorTreeMap;
