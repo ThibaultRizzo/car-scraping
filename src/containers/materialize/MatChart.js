@@ -4,7 +4,8 @@ import * as constants from '../../constants';
 
 import NumberHighlight from '../../components/NumberHighlight';
 import VendorTreeMap from '../../components/data-visualisation/TreeMap';
-import BoxPlot from '../../components/data-visualisation/BoxPlot';
+// import DynamicTreemapExample from '../../components/data-visualisation/CustomTreeMap';
+import BoxPlotChart from '../../components/data-visualisation/BoxPlot';
 
 class MatChart extends React.Component {
     state = {
@@ -26,7 +27,7 @@ class MatChart extends React.Component {
         //     .then(res => {
         //         this.setState({ boxplot: res.data });
         //     });
-        this.setState({ numbers: [{ title: "First", number: 10, content: "Blabla" }, { title: "Second", number: 20, content: "Blabla" }, { title: "Third", number: 30, content: "Blabla" }] });
+        this.setState({ numbers: [{ title: "Number of referenced cars", number: 100, content: "Evolution through time" }, { title: "Number of retailer scraped", number: 3, content: "Trend" }, { title: "Average price of a car", number: 300, content: "Blabla" }] });
         // this.setState({ treemaps: [{}] });
         this.setState({ boxplot: [{}] });
     }
@@ -54,27 +55,21 @@ const MatNumberHighlightListView = ({ data, ...props }) => {
 }
 
 const MatTreemapListView = ({ data = [], ...props }) => {
-    console.dir(data);
-    // return (
-    // <div {...props}>
-    //     {data.map((treemap, id) => {
     return (
         <VendorTreeMap
             {...props}
-            // key={"tr-" + id}
             width="1000"
             height="500"
-            data={data} />);
-    //     })}
-    // </div>
-    // );
+            data={data} />
+        // <DynamicTreemapExample />
+    );
 }
 
 const MatBoxPlotListView = ({ data, ...props }) => {
-    const boxPlotData = [{}];
+    const boxPlotData = [{ key: 'Volvo', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }, { key: 'Mercedes', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }, { key: 'CLicli', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }]
     return (
         <div {...props}>
-            <BoxPlot data={boxPlotData} />
+            <BoxPlotChart width='800' height='800' data={boxPlotData} />
         </div>
     );
 }

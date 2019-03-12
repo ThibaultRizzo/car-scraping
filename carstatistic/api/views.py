@@ -15,10 +15,10 @@ def get_vendor_treemaps(request):
     Returns a JSON-like object to be used to create a treemap
     """
     vendor_list = ['aramisAuto', 'lacentrale', 'goodbuyauto.it']
-    res = {}
+    res = []
     for vendor in vendor_list:
-        res[vendor] = {"name": vendor, "children": getVendorNode(vendor)}
-    return Response(res)
+        res.append({"name": vendor, "children": getVendorNode(vendor)})
+    return Response({"name": "Treemap", "children": res})
 
 
 @api_view(['GET'])

@@ -1,7 +1,33 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
+
 import * as d3 from 'd3';
+import './TreeMap.scss';
 
 const VendorTreeMap = ({ data, width, height }) => {
+    let node, rootNode;
+    node = rootNode = data;
+    const setTreeColor = (tree, maxValue) => {
+        const getColorOfIndex = (index, nbMax = 1) => `hsla(${index * (255 / nbMax)}, 100%, 50%, 1)`;
+        if (tree.children) {
+            const nbVendors = tree.children.length;
+            tree.children.forEach((vendor, index) => {
+                let colorDomain = [0, maxValue], colorRange = ['white', getColorOfIndex(index, nbVendors)];
+                let colorFn = d3.scaleLinear().range(colorRange).domain(colorDomain);
+                vendor.color = colorFn(index);
+                setColor(vendor.children, colorFn);
+            })
+        }
+    }
+    const setColor = (nodeArray, colorFn) => {
+        nodeArray.forEach(node => {
+            node.color = colorFn(node.value)
+            if (node.children) {
+                setColor(node.children, colorFn);
+            }
+        });
+    }
+
     const drawTreemap = (data) => {
         let root = d3.hierarchy(data);
         let treemap = d3.treemap()
@@ -12,8 +38,10 @@ const VendorTreeMap = ({ data, width, height }) => {
             .sum(d => d.size) // Creates the values of each node
             .sort((a, b) => b.size - a.size); // Creates the hierarchy between each node
         treemap(root);
-        return root.descendants().map((d, id) => <Leaf key={'leaf' + id} d={d} />);
+        setTreeColor(root, root.height);
+        return root.descendants().map((d, id) => <Leaf root={rootNode} node={node} maxWidth={width} maxHeight={height} max={root.height} colorIndex={id} key={'leaf' + id} d={d} />);
     }
+
 
     return (
         <svg
@@ -29,19 +57,46 @@ const VendorTreeMap = ({ data, width, height }) => {
 }
 
 
-const Leaf = ({ d, key }) => {
-    // const getColor = d => { while (d.depth > 1) d = d.parent; return color(d.data.name); }
+const Leaf = ({ node, root, d, max, colorIndex, maxWidth, maxHeight, ...props }) => {
     // const yText = (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`;
     // const yOpacity = (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null;
+
+    // const zoom = (d) => {
+    //     console.dir(d);
+    //     var kx = maxWidth / (d.x1 - d.x0), ky = maxHeight / (d.y1 - d.y0);
+    //     var x = d3.scaleLinear().range([0, maxWidth])
+    //     var y = d3.scaleLinear().range([0, maxHeight])
+    //     x.domain([d.x, d.x + d.dx]);
+    //     y.domain([d.y, d.y + d.dy]);
+
+    //     // var t = svg.selectAll("g.cell").transition()
+    //     //     .duration(d3.event.altKey ? 7500 : 750)
+    //     //     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+    //     debugger;
+    //     // t.select("rect")
+    //     //     .attr("width", function(d) { return kx * d.dx - 1; })
+    //     //     .attr("height", function(d) { return ky * d.dy - 1; })
+
+    //     // t.select("text")
+    //     //     .attr("x", function(d) { return kx * d.dx / 2; })
+    //     //     .attr("y", function(d) { return ky * d.dy / 2; })
+    //     //     .style("opacity", function(d) { return kx * d.dx > d.w ? 1 : 0; });
+
+    //     node = d;
+    //     d3.event.stopPropagation();
+    // }
     return (
-        <g key={key} transform={`translate(${d.x0},${d.y0})`}>
+        <g transform={`translate(${d.x0},${d.y0})`} {...props}>
             {/* <title>`${d.ancestors().reverse().map(d => d.data.name).join("/")}\n${format(d.value)}`</title> */}
             <rect
                 // id={`O-leaf-${id}`}
-                fill="red"
+                fill={d.color}
                 fillOpacity="0.6"
                 width={d.x1 - d.x0}
-                height={d.y1 - d.y0}></rect>
+                height={d.y1 - d.y0}
+            // onClick={d && zoom(node == d.parent ? root : d.parent)}
+
+            ></rect>
             {/* <clipPath id={`O-leaf-${id}`}>
                 <use xlinkHref={d.leafUid.href}>
                 </use>
@@ -55,5 +110,22 @@ const Leaf = ({ d, key }) => {
         </g>
     );
 }
+
+// TreemapLeaf.propTypes = {
+//     animation: AnimationPropType,
+//     height: PropTypes.number.isRequired,
+//     mode: PropTypes.string,
+//     node: PropTypes.object.isRequired,
+//     onLeafClick: PropTypes.func,
+//     onLeafMouseOver: PropTypes.func,
+//     onLeafMouseOut: PropTypes.func,
+//     scales: PropTypes.object.isRequired,
+//     width: PropTypes.number.isRequired,
+//     r: PropTypes.number.isRequired,
+//     x0: PropTypes.number.isRequired,
+//     x1: PropTypes.number.isRequired,
+//     y0: PropTypes.number.isRequired,
+//     y1: PropTypes.number.isRequired
+// };
 
 export default VendorTreeMap;

@@ -23,3 +23,14 @@ When installing a new library: always do the following:
     <ol>Save the new dependency in requirements.txt: pip freeze > requirements.txt</ol>
 </li>
 
+When cloning the project, here are the steps required for the database:
+<ol>
+    <li>Download postgre from their website</li>
+    <li>Add psql to your $PATH</li>
+    <li>Opening a new terminal, insert: psql</li>
+    <li>When inside the psql command tool, create a new user: CREATE USER pack;  This is the one referred to in the settings.py file </li>
+    <li>Then, create a new database: CREATE DATABASE car_scraping OWNER pack;    Again, both database name and user are referring to in the settings.py</li>
+    <li>Test the creation by entering \list and see the newly created DB</li>
+    <li>Make the migrations on your venv terminal: python manage.py migrate </li>
+    <li>Run the server: python manage.py runserver</li>
+</ol>

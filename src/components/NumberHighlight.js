@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-materialize';
 
-const NumberHighlight = ({ data, layoutClass }) => {
+const NumberHighlight = ({ data, layoutClass, ...props }) => {
     const { title, number, content } = data;
     return (
         <div className={layoutClass}>
@@ -9,10 +9,12 @@ const NumberHighlight = ({ data, layoutClass }) => {
                 className='blue-grey darken-1'
                 textClassName='white-text'
                 title={title}
-                actions={[<span>{number}</span>]}>
+                actions={[<span key={"actions" + number}> {number}</span>]}
+                {...props}
+            >
                 {content}
             </Card>
-        </div>
+        </div >
     );
 }
 
