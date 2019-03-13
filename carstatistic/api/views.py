@@ -1,12 +1,24 @@
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from carstatistic.models import CarStatistic, CarStatisticTitle
+from carstatistic.api.serializers import CarStatisticSerializer
+
 from scraping.models import Car
+import datetime
+
+
+class CarViewSet(viewsets.ModelViewSet):
+    serializer_class = CarStatisticSerializer
+    queryset = CarStatistic.objects.all()
 
 
 @api_view(['GET'])
 def get_highlighted_number(request):
-    return Response()
+    queryset = CarStatistic.objects.getLatestStats()
+    serializer = CarStatisticSerializer(queryset, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

@@ -6,6 +6,12 @@ class CarManager(models.Manager):
     def get_all_models(self, vendor):
         return Car.objects.filter(vendor=vendor).order_by('model').values('model', 'brand').distinct()
 
+    def get_retailer_count(self):
+        return Car.objects.values('vendor').distinct().count()
+
+    def get_avg_car_price(self):
+        return Car.objects.aggregate(models.Avg('price'))['price__avg']
+
     def get_car_count(self):
         return Car.objects.count()
 

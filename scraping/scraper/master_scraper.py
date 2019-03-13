@@ -6,6 +6,8 @@ from scraping.scraper.models import Vendor
 from scraping.scraper.app_dictionaries import (vendorDict, ParsingRule)
 from scraping.models import Car
 
+from carstatistic.models import CarStatistic, CarStatisticTitle
+
 import concurrent.futures
 
 URL_PAGE_LIMIT = 2
@@ -44,13 +46,19 @@ def scrapAllWebsites():
         with concurrent.futures.ProcessPoolExecutor(max_workers=20) as executor:
             # Iterates over list of urls
             carList = []
-            i=1 #count 
+            i = 1  # count
             for url in urlList:
                 car_scraped = getCarFromUrl(url, vendor)
                 carList.append(car_scraped)
                 # executor.submit(getAndSaveCar, url, vendor)
-                i+=1
+                i += 1
             Car.objects.save_as_batch(carList)
+
+    CarStatistic.objects.processCarStatistics((
+        CarStatisticTitle.NB_REF_CAR,
+        CarStatisticTitle.NB_RTL,
+        CarStatisticTitle.AVG_CAR_PRC
+    ))
 
 
 def getAndSaveCar(url, vendor):

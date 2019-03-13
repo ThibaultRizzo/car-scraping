@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 
     'scraping',
-    'carstatistic'
+    'carstatistic',
+    'common'
 ]
 
 MIDDLEWARE = [
