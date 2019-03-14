@@ -3,11 +3,26 @@ from django.db.transaction import atomic
 
 
 class CarManager(models.Manager):
-    def get_all_models(self, vendor):
+    def get_all_vendors(self):
+        return map(lambda el: el["vendor"], list(Car.objects.values('vendor').order_by('vendor').distinct('vendor')))
+
+    def get_all_brands(self):
+        return map(lambda el: el["brand"], list(Car.objects.values('brand').order_by('brand').distinct('brand')))
+
+    def get_all_models(self, vendor, *fields):
+        return list(Car.objects.order_by('brand').values('model', 'brand', *fields).distinct('brand'))
+
+    def get_all_models_per_brand(self, brand, fields):
+        return Car.objects.filter(brand=brand).order_by('model').values('model', *fields).distinct()
+
+    def get_all_models_per_vendor(self, vendor):
         return Car.objects.filter(vendor=vendor).order_by('model').values('model', 'brand').distinct()
 
     def get_retailer_count(self):
         return Car.objects.values('vendor').distinct().count()
+
+    def get_avg_car_price(self):
+        return Car.objects.aggregate(models.Avg('price'))['price__avg']
 
     def get_avg_car_price(self):
         return Car.objects.aggregate(models.Avg('price'))['price__avg']

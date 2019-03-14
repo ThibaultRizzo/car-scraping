@@ -5,6 +5,8 @@ import HomePage from './containers/HomePage';
 // import Signup from './containers/Signup';
 // import CarRankingView from './containers/CarRankingView';
 import { MatChart } from './containers/materialize/MatChart';
+import MatTable from './containers/materialize/MatTable';
+import MatScrap from './containers/materialize/MatScrap';
 
 const BaseRouter = () => (
     <div>
@@ -13,6 +15,8 @@ const BaseRouter = () => (
         <Route exact path='/signup/' component={Signup} /> */}
 
         <Route exact path='/chart/' component={MatChart} />
+        <Route exact path='/table/' component={MatTable} />
+        <Route exact path='/scrap/' component={MatScrap} />
     </div>
 );
 

@@ -1,18 +1,20 @@
 import React from 'react';
 import { Card } from 'react-materialize';
+import { CarStatisticTitle, Trend } from '../enums';
 
-const NumberHighlight = ({ data, layoutClass, ...props }) => {
-    const { title, number, content } = data;
+const NumberHighlight = ({ data, layoutClass, color, ...props }) => {
+    const { title, number, unit, trend } = data;
     return (
         <div className={layoutClass}>
             <Card
                 className='blue-grey darken-1'
                 textClassName='white-text'
-                title={title}
-                actions={[<span key={"actions" + number}> {number}</span>]}
+                title={`${Math.floor(number)} ${unit}`}
+                actions={[<span key={"actions" + number}> {Trend[trend]}</span>]}
                 {...props}
+                style={{ background: color }}
             >
-                {content}
+                {CarStatisticTitle[title]}
             </Card>
         </div >
     );

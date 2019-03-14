@@ -3,22 +3,28 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 import datetime
 import math
-from enum import Enum
+from enumchoicefield import ChoiceEnum, EnumChoiceField
 
 from scraping.models import Car
 
 
-class CarStatisticTitle(Enum):
+class CarStatisticTitle(ChoiceEnum):
     NB_REF_CAR = "Number of referenced cars"
     NB_RTL = "Number of retailers scraped"
     AVG_CAR_PRC = "Average Car Price"
+    DEFAULT = "Default title"
+
+
+class Trend(ChoiceEnum):
+    ASC = 'ASCENDING'
+    DESC = 'DESCENDING'
+    FLAT = 'FLAT'
 
 
 class CarStatisticManager(models.Manager):
     def getLatestStats(self):
-        stat_list = CarStatistic.objects.all().order_by(
+        return CarStatistic.objects.all().order_by(
             'title', '-created').distinct('title')
-        return stat_list
 
     def getLastTrend(self, title, date, limit):
         older_stat_list = list(CarStatistic.objects.filter(
@@ -30,13 +36,13 @@ class CarStatisticManager(models.Manager):
         # Compute the trend of current instance compared to the previous one
         last_trend = CarStatistic.objects.getLastTrend(title, date, 1)
         if last_trend is None:
-            return 'FLAT'
+            return Trend.FLAT
         elif math.isclose(last_trend[0].number, number):
-            return 'FLAT'
+            return Trend.FLAT
         elif last_trend[0].number < number:
-            return 'ASCENDING'
+            return Trend.ASC
         else:
-            return 'DESCENDING'
+            return Trend.DESC
 
     def create_or_update_stat(self, title, number, unit, description):
         try:
@@ -64,20 +70,15 @@ class CarStatisticManager(models.Manager):
 
 
 class CarStatistic(models.Model):
-    Trend = (
-        ('ASC', 'ASCENDING'),
-        ('DESC', 'DESCENDING'),
-        ('FLAT', 'FLAT')
-    )
     title = models.CharField(
         max_length=100)
-    title = models.CharField(max_length=50, choices=[(
-        tag, tag.value) for tag in CarStatisticTitle])
+    title = EnumChoiceField(
+        CarStatisticTitle, default=CarStatisticTitle.DEFAULT)
     created = models.DateField(auto_now=True)
     number = models.DecimalField(max_digits=15, decimal_places=2)
     unit = models.CharField(max_length=10, null=True)
     description = models.CharField(max_length=100)
-    trend = models.CharField(max_length=10, choices=Trend, default='FLAT')
+    trend = EnumChoiceField(Trend, default=Trend.FLAT)
     objects = CarStatisticManager()
 
     class Meta:

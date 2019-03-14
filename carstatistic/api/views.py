@@ -26,7 +26,7 @@ def get_vendor_treemaps(request):
     """
     Returns a JSON-like object to be used to create a treemap
     """
-    vendor_list = ['aramisAuto', 'lacentrale', 'goodbuyauto.it']
+    vendor_list = Car.objects.get_all_vendors()
     res = []
     for vendor in vendor_list:
         res.append({"name": vendor, "children": getVendorNode(vendor)})
@@ -35,14 +35,19 @@ def get_vendor_treemaps(request):
 
 @api_view(['GET'])
 def get_boxplot(request):
-    return Response()
+    brand_list = Car.objects.get_all_brands()
+    res = []
+    for brand in brand_list:
+        res.append(
+            {"key": brand, "values": Car.objects.get_all_models_per_brand(brand, ['price'])})
+    return Response(res)
 
 
 def getVendorNode(vendor):
     '''
     Get a list of all the models referred in DB and their count given vendor
     '''
-    model_list = Car.objects.get_all_models(vendor)
+    model_list = Car.objects.get_all_models_per_vendor(vendor)
     vendor_dict = {}
     vendor_list = []
     # For each model in list, we

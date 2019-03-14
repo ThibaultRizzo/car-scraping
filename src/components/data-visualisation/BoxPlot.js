@@ -3,38 +3,44 @@ import React from 'react';
 import Axis from './Axis';
 import * as d3 from 'd3';
 
-const BoxPlotChart = ({ width, height, data }) => {
+const BoxPlotChart = ({ ratio, data = [] }) => {
+    let width = 300;
+    let height = 300;
+    let maxValue = 100000
+    console.log('Data', data)
     return (
         <svg
-            viewBox={`0,0,${width},${height}`}
+            viewBox={`0,0,1000,400`}
             // style={{ width: '100%', height: 'auto', font: '20px sans-serif' }}
             className="boxplotchart"
-            width={width}
-            height={height}
+            width={ratio}
+            height="100%"
         >
-            <BoxPlot
+            {data.length > 0 && <BoxPlot
                 x={50}
                 y={50}
-                width={300}
-                height={300}
+                step={50}
+                width={width}
+                height={height}
                 data={data}
-                datapoint={({ x, y, key }) => <Box x={x} y={y} key={key} width={25} />}
-            />
+                maxValue={maxValue}
+                datapoint={({ x, y, key }) => <Box x={x} y={y} key={key} width={300} maxValue={maxValue} boxWidth={10} />}
+            />}
         </svg>
     );
 }
 
 class BoxPlot extends React.PureComponent {
-    coordinatesArray = [''].concat(this.props.data.map(val => val.key));
+    coordinatesArray = [''].concat(this.props.data.map(val => val.key))
     state = {
         xScale: d3
             .scaleOrdinal()
             .domain(this.coordinatesArray)
-            .range(this.coordinatesArray.map((val, index) => index * 100)),
+            .range(this.coordinatesArray.map((_, index) => index * this.props.step)),
         yScale: d3
             .scaleLinear()
-            .domain([0, 10000])
-            .range([300, 0])
+            .domain([0, this.props.maxValue])
+            .range([this.props.height, 0])
     };
 
     static getDerivedStateFromProps(props, state) {
@@ -48,11 +54,13 @@ class BoxPlot extends React.PureComponent {
     }
 
     render() {
+        console.log('CoordArray', this.coordinatesArray);
         const { x, y, data, height, datapoint } = this.props,
             { yScale, xScale } = this.state;
+        console.log('Height', height);
         return (
             <g transform={`translate(${x}, ${y})`}>
-                {data.map(({ key, values }, index) => datapoint({ x: xScale(key), y: values.map(el => yScale(el.value)), key: 'data' + index }))}
+                {data.map(({ key, values }, index) => datapoint({ x: xScale(key), y: values.map(el => yScale(el.price)), key: 'data' + index }))}
                 <Axis x={0} y={0} scale={yScale} type="Left" />
                 <Axis x={0} y={height} scale={xScale} type="Bottom" />
             </g>
@@ -82,7 +90,7 @@ class Box extends React.Component {
         return binMeta;
     }
 
-    normalizeData = (d) => Math.floor((300 - d) * 10000 / 300, 1);
+    normalizeData = (d) => Math.floor((this.props.width - d) * this.props.maxValue / this.props.width, 1);
 
     highlight = () => {
         this.setState({ hovered: true });
@@ -99,24 +107,24 @@ class Box extends React.Component {
             ? { fill: '#72bfff', opacity: 0.8 }
             : { fill: 'steelblue', opacity: 0.8, transition: '0.5s' };
         const { quartiles, range } = this.computePlotData(this.props.y);
-        const { x, width } = this.props;
+        const { x, boxWidth } = this.props;
         return (
             <g onMouseOver={this.highlight} onMouseOut={this.unhighlight}
-                transform={`translate(${x - width / 2},0)`} style={{ stroke: 'black', strokeWidth: '1px' }}>
-                <line className="center" x1={width / 2} y1={range[1]} x2={width / 2} y2={range[0]} style={lineStyle}></line>
-                <rect className="box" x="0" y={quartiles[0]} width={width} height={quartiles[2] - quartiles[0]} style={recStyle}></rect>
-                <line className="median" x1="0" y1={quartiles[2]} x2={width} y2={quartiles[2]}></line>
-                <line className="whisker" x1="0" y1={range[1]} x2={width} y2={range[1]} style={lineStyle}></line>
-                <line className="whisker" x1="0" y1={range[0]} x2={width} y2={range[0]} style={lineStyle}></line>
+                transform={`translate(${x - boxWidth / 2},0)`} style={{ stroke: 'black', strokeWidth: '1px' }}>
+                <line className="center" x1={boxWidth / 2} y1={range[1]} x2={boxWidth / 2} y2={range[0]} style={lineStyle}></line>
+                <rect className="box" x="0" y={quartiles[0]} boxWidth={boxWidth} height={quartiles[2] - quartiles[0]} style={recStyle}></rect>
+                <line className="median" x1="0" y1={quartiles[2]} x2={boxWidth} y2={quartiles[2]}></line>
+                <line className="whisker" x1="0" y1={range[1]} x2={boxWidth} y2={range[1]} style={lineStyle}></line>
+                <line className="whisker" x1="0" y1={range[0]} x2={boxWidth} y2={range[0]} style={lineStyle}></line>
                 {/* TODO: Add outliers */}
                 {/* <circle className="outlier" r=" 5" cx="27" cy="0" style={lineStyle}></circle> */}
                 {this.state.hovered &&
                     <>
                         <text className="box" dy=".1em" dx="-6" x="0" y={quartiles[0]} textAnchor="end">{this.normalizeData(quartiles[0])}</text>
-                        <text className="box" dy=".3em" dx="6" x={width} y={quartiles[1]} textAnchor="start">{this.normalizeData(quartiles[1])}</text>
+                        <text className="box" dy=".3em" dx="6" x={boxWidth} y={quartiles[1]} textAnchor="start">{this.normalizeData(quartiles[1])}</text>
                         <text className="box" dy=".3em" dx="-6" x="0" y={quartiles[2]} textAnchor="end">{this.normalizeData(quartiles[2])}</text>
-                        <text className="whisker" dy=".3em" dx="6" x={width} y={range[1]} style={lineStyle}>{this.normalizeData(range[1])}</text>
-                        <text className="whisker" dy=".3em" dx="6" x={width} y={range[0]} style={lineStyle}>{this.normalizeData(range[0])}</text>
+                        <text className="whisker" dy=".3em" dx="6" x={boxWidth} y={range[1]} style={lineStyle}>{this.normalizeData(range[1])}</text>
+                        <text className="whisker" dy=".3em" dx="6" x={boxWidth} y={range[0]} style={lineStyle}>{this.normalizeData(range[0])}</text>
                     </>
                 }
             </g>

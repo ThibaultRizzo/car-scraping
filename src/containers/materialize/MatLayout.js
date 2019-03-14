@@ -49,7 +49,7 @@ const MatCollection = (props) => {
                 className="item-active row blue-grey-text text-darken-3"
                 icon="table_chart"
                 color="white"
-                path="/cartab/"
+                path="/table/"
                 name="Tables"
             />
             <MatLink
@@ -59,6 +59,13 @@ const MatCollection = (props) => {
                 path="/report/"
                 name="Report"
                 disabled
+            />
+            <MatLink
+                className="item-active row blue-grey-text text-darken-3"
+                icon="how_to_vote"
+                color="white"
+                path="/scrap/"
+                name="Scrap"
             />
             <MatLink
                 className="item-active row blue-grey-text text-darken-3"
