@@ -63,7 +63,6 @@ class CarViewSet(viewsets.ModelViewSet):
         writer = csv.writer(response)
         fields_list = Car.get_fields()
         car_list = Car.objects.all().order_by(*fields_list)
-        print(car_list)
         writer.writerow(fields_list)
         for car in car_list:
             row = []

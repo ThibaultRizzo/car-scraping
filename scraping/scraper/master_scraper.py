@@ -10,7 +10,7 @@ from carstatistic.models import CarStatistic, CarStatisticTitle
 
 import concurrent.futures
 
-URL_PAGE_LIMIT = 2
+URL_PAGE_LIMIT = 20
 
 http = "http://3.17.154.4:8080"
 https = "https://3.17.154.4:8080"
@@ -70,7 +70,7 @@ def getAndSaveCar(url, vendor):
 def getListOfAllUrls(vendorInfo):
     urlList = []
     it = vendorInfo.basePageNb
-    while it < URL_PAGE_LIMIT:
+    while it <= URL_PAGE_LIMIT:
         r = requests.get(vendorInfo.searchUrl % it)
         soup = BeautifulSoup(r.text, 'html.parser')
         tmpAHrefList = vendorInfo.hrefLambda(soup)
