@@ -62,7 +62,6 @@ const Leaf = ({ node, root, d, max, colorIndex, maxWidth, maxHeight, ...props })
     // const yOpacity = (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null;
 
     // const zoom = (d) => {
-    //     console.dir(d);
     //     var kx = maxWidth / (d.x1 - d.x0), ky = maxHeight / (d.y1 - d.y0);
     //     var x = d3.scaleLinear().range([0, maxWidth])
     //     var y = d3.scaleLinear().range([0, maxHeight])

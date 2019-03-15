@@ -9,12 +9,16 @@ export default class MatScrap extends React.Component {
         isLoading: false
     }
     componentDidMount() {
+        window.confirm("Do you really want to launch a scraping process? This will erase the current data in Car table...")
+            && this.scrapCarData();
+    }
+
+    scrapCarData = () => {
         this.setState({ isLoading: true });
         axios.get(constants.SCRAPING_URL)
             .then(res => {
                 this.setState({ isLoading: false });
             });
-
     }
 
     render() {

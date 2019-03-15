@@ -6,11 +6,10 @@ import * as d3 from 'd3';
 const BoxPlotChart = ({ ratio, data = [] }) => {
     let width = 300;
     let height = 300;
-    let maxValue = 100000
-    console.log('Data', data)
+    let maxValue = 100000;
     return (
         <svg
-            viewBox={`0,0,1000,400`}
+            viewBox={`0,0,1100,400`}
             // style={{ width: '100%', height: 'auto', font: '20px sans-serif' }}
             className="boxplotchart"
             width={ratio}
@@ -19,7 +18,7 @@ const BoxPlotChart = ({ ratio, data = [] }) => {
             {data.length > 0 && <BoxPlot
                 x={50}
                 y={50}
-                step={50}
+                step={100}
                 width={width}
                 height={height}
                 data={data}
@@ -31,7 +30,7 @@ const BoxPlotChart = ({ ratio, data = [] }) => {
 }
 
 class BoxPlot extends React.PureComponent {
-    coordinatesArray = [''].concat(this.props.data.map(val => val.key))
+    coordinatesArray = [''].concat(this.props.data.map(val => val.key));
     state = {
         xScale: d3
             .scaleOrdinal()
@@ -54,10 +53,8 @@ class BoxPlot extends React.PureComponent {
     }
 
     render() {
-        console.log('CoordArray', this.coordinatesArray);
         const { x, y, data, height, datapoint } = this.props,
             { yScale, xScale } = this.state;
-        console.log('Height', height);
         return (
             <g transform={`translate(${x}, ${y})`}>
                 {data.map(({ key, values }, index) => datapoint({ x: xScale(key), y: values.map(el => yScale(el.price)), key: 'data' + index }))}
@@ -112,7 +109,7 @@ class Box extends React.Component {
             <g onMouseOver={this.highlight} onMouseOut={this.unhighlight}
                 transform={`translate(${x - boxWidth / 2},0)`} style={{ stroke: 'black', strokeWidth: '1px' }}>
                 <line className="center" x1={boxWidth / 2} y1={range[1]} x2={boxWidth / 2} y2={range[0]} style={lineStyle}></line>
-                <rect className="box" x="0" y={quartiles[0]} boxWidth={boxWidth} height={quartiles[2] - quartiles[0]} style={recStyle}></rect>
+                <rect className="box" x="0" y={quartiles[0]} width={boxWidth} height={quartiles[2] - quartiles[0]} style={recStyle}></rect>
                 <line className="median" x1="0" y1={quartiles[2]} x2={boxWidth} y2={quartiles[2]}></line>
                 <line className="whisker" x1="0" y1={range[1]} x2={boxWidth} y2={range[1]} style={lineStyle}></line>
                 <line className="whisker" x1="0" y1={range[0]} x2={boxWidth} y2={range[0]} style={lineStyle}></line>

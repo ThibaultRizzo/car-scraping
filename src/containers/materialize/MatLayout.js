@@ -24,7 +24,7 @@ const MatCollection = (props) => {
                 <Icon className="col">home</Icon>
                 <span><Link style={{ color: 'white' }} to={"/"}>Home</Link></span>
             </CollectionItem> */}
-            <MatLink
+            {/* <MatLink
                 className="row blue-grey-text text-darken-3"
                 icon="home"
                 color="white"
@@ -37,7 +37,7 @@ const MatCollection = (props) => {
                 color="white"
                 path="/carspreview/"
                 name="Cars"
-            />
+            /> */}
             <MatLink
                 className="item-active row blue-grey-text text-darken-3"
                 icon="bar_chart"
@@ -52,14 +52,14 @@ const MatCollection = (props) => {
                 path="/table/"
                 name="Tables"
             />
-            <MatLink
+            {/* <MatLink
                 className="item-active row blue-grey-text text-darken-3"
                 icon="email"
                 color="white"
                 path="/report/"
                 name="Report"
                 disabled
-            />
+            /> */}
             <MatLink
                 className="item-active row blue-grey-text text-darken-3"
                 icon="how_to_vote"

@@ -27,7 +27,9 @@ class MatChart extends React.Component {
             });
         axios.get(constants.BOXPLOT_URL)
             .then(res => {
-                this.setState({ boxplot: res.data });
+                this.setState(
+                    { boxplot: res.data.sort((a, b) => b.values.length - a.values.length).splice(0, 10) }
+                );
             });
     }
 
@@ -37,8 +39,8 @@ class MatChart extends React.Component {
             <>
                 <h2 className="center-align row">Charts</h2>
                 <MatNumberHighlightListView data={numbers} className="row" />
-                <MatBoxPlotListView data={boxplot} className="row" />
                 <MatTreemapListView data={treemaps} className="row" />
+                <MatBoxPlotListView data={boxplot} className="row" />
             </>
         );
     }
@@ -66,7 +68,7 @@ const MatTreemapListView = ({ data = [], ...props }) => {
 }
 
 const MatBoxPlotListView = ({ data, ...props }) => {
-    // const boxPlotData = [{ key: 'Volvo', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }, { key: 'Mercedes', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }, { key: 'CLicli', values: [{ key: "Volvo", value: 1000 }, { key: "Volvo", value: 2040 }, { key: "Volvo", value: 2300 }, { key: "Volvo", value: 8000 }] }]
+    // const bins = data.sort((a, b) => b.values.length - a.values.length).splice(0, 10);
     return (
         <BoxPlotChart ratio="95%" data={data} {...props} />
     );

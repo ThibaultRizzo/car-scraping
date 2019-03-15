@@ -42,7 +42,6 @@ class Axis extends React.Component {
 
     render() {
         const { x, y, label } = this.props;
-        console.log("X", typeof (x));
         return (
             <g ref={this.gRef} transform={`translate(${x}, ${y})`}>
                 <text style={this.textStyle} {...this.labelPos}>{label}</text>

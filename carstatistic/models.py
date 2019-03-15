@@ -66,7 +66,7 @@ class CarStatisticManager(models.Manager):
                     CarStatisticTitle.NB_RTL, Car.objects.get_retailer_count(), 'retailers', '')
             elif(CarStatisticTitle.AVG_CAR_PRC == title):
                 CarStatistic.objects.create_or_update_stat(
-                    CarStatisticTitle.AVG_CAR_PRC, Car.objects.get_avg_car_price(), '$', '')
+                    CarStatisticTitle.AVG_CAR_PRC, Car.objects.get_avg_car_price(), '€', '')
 
 
 class CarStatistic(models.Model):

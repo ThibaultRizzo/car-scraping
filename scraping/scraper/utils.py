@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 # Utility methods
 
 
@@ -40,6 +41,22 @@ def getKilometers(elem):
         return cleanInt(getNthElem(v, 1, '-'))
     else:
         return 0
+
+
+def get_brand(elem):
+    return re.search(r"'brand': '(.*?)'", elem).group(1)
+
+
+def get_model(elem):
+    return re.search(r"'name': '(.*?)'", elem).group(1)
+
+
+def getRegDate(elem):
+    try:
+        return parseStrToDate('01/01/'+str(cleanInt(elem.get_text())))
+    except:
+        print('Could not retrieve reg date from the following element', elem)
+        return None
 
 
 def isInList(l, index):

@@ -1,14 +1,15 @@
-from bs4 import BeautifulSoup
-import requests
 from django.db import IntegrityError
+from django.core.exceptions import ValidationError
+from bs4 import BeautifulSoup
+import concurrent.futures
+import requests
+import time
 
 from scraping.scraper.models import Vendor
 from scraping.scraper.app_dictionaries import (vendorDict, ParsingRule)
 from scraping.models import Car
-
 from carstatistic.models import CarStatistic, CarStatisticTitle
 
-import concurrent.futures
 
 URL_PAGE_LIMIT = 20
 
@@ -23,7 +24,7 @@ vendorList = (
     Vendor('lacentrale', 'https://www.lacentrale.fr', 'https://www.lacentrale.fr/listing?page=%d',
            0, lambda soup: soup.find_all('a', class_='linkAd')),
     Vendor('aramisAuto', 'https://www.aramisauto.com',
-           'https://www.aramisauto.com/achat/page=%d', 0, lambda soup: soup.find_all('a', class_='real-link vehicle-info-link')),
+           'https://www.aramisauto.com/achat/?page=%d', 0, lambda soup: soup.find_all('a', class_='real-link vehicle-info-link')),
     # Vendor('carvana', 'https://www.carvana.com', 'https://www.carvana.com/cars?page=%d',
     #        1, 'SingleClickLink__StyledLink-sc-1455iy6-0 cnENNQ'),
 )
@@ -36,35 +37,51 @@ proxy_dict = {
 
 
 def scrapAllWebsites():
+    start = time. time()  # Used to measure time of execution
     # Clear all instances from the Car table
+    print('Starting the scraping process...')
     Car.objects.delete_everything()
+    print('Car table cleared...')
 
     # Iterates on all websites URL search pages
     for vendor in vendorList:
         # Get list of all car URLs
         urlList = getListOfAllUrls(vendor)
-        with concurrent.futures.ProcessPoolExecutor(max_workers=20) as executor:
-            # Iterates over list of urls
-            carList = []
-            i = 1  # count
-            for url in urlList:
-                car_scraped = getCarFromUrl(url, vendor)
-                carList.append(car_scraped)
-                # executor.submit(getAndSaveCar, url, vendor)
-                i += 1
-            Car.objects.save_as_batch(carList)
+        print("****** Vendor %s, Size of url list: %d" %
+              (vendor.name, len(urlList)))
+        # with concurrent.futures.ProcessPoolExecutor(max_workers=20) as executor:
+        # Iterates over list of urls
+        carList = []
+        # executor.map(lambda url: carList.append(getCarFromUrl(
+        #     url, vendor.vendor_dictionary)), urlList)
+        for url in urlList:
+            car_scraped = getCarFromUrl(url, vendor)
+            # Need to validate the model before including it to the list
+            try:
+                car_scraped.full_clean()
+            except ValidationError as e:
+                # Do something based on the errors contained in e.message_dict.
+                # Display them to a user, or handle them programmatically.
+                print(
+                    "Skipping this URL: %s because the scraped car is missing some fields" % url, e)
+                continue
+            carList.append(car_scraped)
+        # executor.submit(getAndSaveCar, url, vendor)
+        # print(*carList, sep=", ")
+        Car.objects.save_as_batch(carList)
 
     CarStatistic.objects.processCarStatistics((
         CarStatisticTitle.NB_REF_CAR,
         CarStatisticTitle.NB_RTL,
         CarStatisticTitle.AVG_CAR_PRC
     ))
+    end = time. time()
+    print("Scraping operation took %d seconds to complete" % (end - start))
 
 
 def getAndSaveCar(url, vendor):
     # Get the Car class from each url
-    car = getCarFromUrl(url, vendor.vendor_dictionary)
-    car.save()
+    return getCarFromUrl(url, vendor.vendor_dictionary)
 
 
 def getListOfAllUrls(vendorInfo):
@@ -83,6 +100,18 @@ def getListOfAllUrls(vendorInfo):
     return set(urlList)
 
 
+# def getUrlList(urlList, vendorInfo, it):
+#     print("Getting url")
+#     r = requests.get(vendorInfo.searchUrl % it)
+#     soup = BeautifulSoup(r.text, 'html.parser')
+#     tmpAHrefList = vendorInfo.hrefLambda(soup)
+#     tmpList = map(lambda arg: vendorInfo.baseUrl +
+#                   arg['href'], tmpAHrefList)
+#     if tmpList is None:
+#         return None
+#     urlList += tmpList
+
+
 def getCarFromUrl(url, vendor):
     # Scrap the URL
     vendor_dict = vendor.vendor_dictionary
@@ -97,9 +126,10 @@ def getCarFromUrl(url, vendor):
             if key in vendor_dict:
                 try:
                     value = vendor_dict[key].parseValue(soup)
+                    setattr(scrapedCar, key, value)
                 except:
                     print("The key %s was not found on url %s" % (key, url))
-                setattr(scrapedCar, key, value)
+                    setattr(scrapedCar, key, None)
         scrapedCar.vendor_link = url
         scrapedCar.vendor = vendor.name
         return scrapedCar

@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.transaction import atomic
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class CarManager(models.Manager):
@@ -60,16 +62,17 @@ class Car(models.Model):
     model = models.CharField(max_length=100)
     car_type = models.CharField(max_length=100)
     vendor = models.CharField(max_length=100)
-    reg_date = models.DateField(auto_now=False, null=True)
-    gear_box = models.CharField(max_length=100, null=True)
-    gear_number = models.CharField(max_length=100, null=True)
-    motor_type = models.CharField(max_length=100, null=True)
-    petrol_type = models.CharField(max_length=100, null=True)
-    color = models.CharField(max_length=100, null=True)
-    doors_number = models.CharField(max_length=20, null=True)
-    vendor_link = models.CharField(max_length=500, null=True)
-    owner_number = models.IntegerField(null=True)
-    reg_number = models.CharField(max_length=100, null=True, unique=True)
+    reg_date = models.DateField(auto_now=False, null=True, blank=True)
+    gear_box = models.CharField(max_length=100, null=True, blank=True)
+    gear_number = models.CharField(max_length=100, null=True, blank=True)
+    motor_type = models.CharField(max_length=100, null=True, blank=True)
+    petrol_type = models.CharField(max_length=100, null=True, blank=True)
+    color = models.CharField(max_length=100, null=True, blank=True)
+    doors_number = models.CharField(max_length=20, null=True, blank=True)
+    vendor_link = models.CharField(max_length=500, null=True, blank=True)
+    owner_number = models.IntegerField(null=True, blank=True)
+    reg_number = models.CharField(
+        max_length=100, null=True, blank=True, unique=True)
     created = models.DateTimeField(auto_now=True)
     objects = CarManager()
 
@@ -78,3 +81,9 @@ class Car(models.Model):
 
     def get_fields():
         return list(map(lambda field: field.name, Car._meta.local_fields))
+
+
+@receiver(pre_save, sender=Car)
+def format_fields(sender, instance, **kwargs):
+    instance.brand = instance.brand.upper()
+    instance.model = instance.model.title()
