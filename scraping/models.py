@@ -75,3 +75,6 @@ class Car(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+    def get_fields():
+        return list(map(lambda field: field.name, Car._meta.local_fields))
