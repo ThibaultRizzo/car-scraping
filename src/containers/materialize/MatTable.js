@@ -7,11 +7,20 @@ export default class MatTable extends React.Component {
     state = {
         data: [],
         pageNb: 1,
-        maxPageNb: 10
+        maxPageNb: 10,
+        isDiscovered: true
     }
 
     componentDidMount() {
         this.loadData(this.state.pageNb);
+    }
+
+    discover = () => {
+        this.setState({ isDiscovered: false });
+    }
+
+    undiscover = () => {
+        this.setState({ isDiscovered: true });
     }
 
     loadData = (pageNb) => {
@@ -56,11 +65,21 @@ export default class MatTable extends React.Component {
     render() {
         const keysList = this.state.data.length > 0 ? Object.getOwnPropertyNames(this.state.data[0]) : [];
         return (
-            <>
+            <div onClick={this.discover}>
                 <h2 className="center-align row">Tables</h2>
                 <Row>
                     <Pagination className="right-align offset-s1" items={this.state.maxPageNb} activePage={this.state.page} maxButtons={10} onSelect={num => this.loadData(num)} />
                 </Row>
+                {
+                    this.state.isDiscovered
+                        ? (
+                            <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3 btn-floating pulse' large style={{ bottom: '45px', right: '24px' }} />
+                        )
+                        : (
+                            <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3' large style={{ bottom: '45px', right: '24px' }} />
+                        )
+                }
+                {/* <MatUpload isDiscovered={this.state.isDiscovered} /> */}
                 <Table>
                     <thead>
                         <tr>
@@ -72,8 +91,8 @@ export default class MatTable extends React.Component {
                         {this.state.data.map((el, i) => <CarRow key={"row" + i} data={el} />)}
                     </tbody>
                 </Table>
-                <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3' large style={{bottom: '45px', right: '24px'}}/>
-            </>
+                {/* */}
+            </div>
         );
     }
 }

@@ -1,18 +1,15 @@
 import React from 'react';
-import axios from 'axios';
-import * as constants from '../../constants';
-import { Parallax, Row } from 'react-materialize'
 
 const MatHome = (props) => {
     return (
-        <>  
+        <>
             <div className="container">
                 <h2 className="col s12 center-align row">Car Scrapping Tool - Aramis Auto - Beta Version</h2>
                 <p style={{ textAlign: 'justify' }}>La version béta de cette app a pour but de vous présenter quelques-unes des possibilités que l'on peut vous offrir autour du scrapping de listes de véhicules sur votre site et celui des acteurs majeurs du domaine, en France, en Europe et dans le monde.</p>
                 <h5>Philosophie du projet :</h5>
                 <p style={{ textAlign: 'justify' }}>Vous offrir une visibilité quotidienne sur une partie du marché de la vente de véhicule en ligne en automatisant votre veille concurrentielle et en proposant, de façon visuelle, une analyse de la donnée qui en est extraite. Cette analyse de la donnée est construite ensemble, pour vous proposer un outil entièrement adapté à vos besoins.</p>
                 <h5>Equipe du projet :</h5>
-                <p style={{ textAlign: 'justify' }}><a target="_blank" href="http://team-pack.fr/">Pack.</a> est un cabinet de conseil qui accompagne ses clients dans leur stratégie de croissance et d'innovation, autour des trois grands axes qui constitue une entreprise :</p>
+                <p style={{ textAlign: 'justify' }}><a target="_blank" rel="noopener noreferrer" href="http://team-pack.fr/">Pack.</a> est un cabinet de conseil qui accompagne ses clients dans leur stratégie de croissance et d'innovation, autour des trois grands axes qui constitue une entreprise :</p>
                 <ol style={{
                     listStyle: 'square'
                 }}>
@@ -49,19 +46,19 @@ const MatHome = (props) => {
                 <ol style={{
                     listStyle: 'square'
                 }}>
-                <b>
-                    <li>Réactivité avec un retour dans les 2 jours ouvrés ;</li>
-                    <li>Engagement sur un taux de fiabilité supérieur à 95% au total et 90% par vendeur* ;</li>
-                    <li>Scraping automatique et quotidien de l'ensemble des sites ;</li>
-                    <li>Accès via login à la donnée scrapée ;</li>
-                    <li>Visibilité des différentes informations de scrapping (fraicheur de la donnée, taux de fiabilité, nombres de voitures scrapées ...) ;</li>
-                    <li>Page tableau comprenant les champs principaux préalablement choisi ;</li>
-                    <li>Bouton pour lancer le scraping manuellement ;</li>
-                    <li>Possibilité de filtrer et trier les données principales directement dans l'application ;</li>
-                    <li>Quelques données d'historique (tendance sur le nombre de voiture scrapée et le prix moyen par rapport au scrapping précédent) ;</li>
-                    <li>Bouton pour lancer le scraping manuellement ;</li>
-                    <li>Gestion d'une DB de 20 000 lignes.</li>
-                </b> 
+                    <b>
+                        <li>Réactivité avec un retour dans les 2 jours ouvrés ;</li>
+                        <li>Engagement sur un taux de fiabilité supérieur à 95% au total et 90% par vendeur* ;</li>
+                        <li>Scraping automatique et quotidien de l'ensemble des sites ;</li>
+                        <li>Accès via login à la donnée scrapée ;</li>
+                        <li>Visibilité des différentes informations de scrapping (fraicheur de la donnée, taux de fiabilité, nombres de voitures scrapées ...) ;</li>
+                        <li>Page tableau comprenant les champs principaux préalablement choisi ;</li>
+                        <li>Bouton pour lancer le scraping manuellement ;</li>
+                        <li>Possibilité de filtrer et trier les données principales directement dans l'application ;</li>
+                        <li>Quelques données d'historique (tendance sur le nombre de voiture scrapée et le prix moyen par rapport au scrapping précédent) ;</li>
+                        <li>Bouton pour lancer le scraping manuellement ;</li>
+                        <li>Gestion d'une DB de 20 000 lignes.</li>
+                    </b>
                 </ol>
                 <i>*la fiabilité correspond au taux de voitures scrapées entièrement et intégrant la base de donnée sur le nombre de voitures totales du site (voiture rejetée).</i>
                 <h5> Les options possibles :</h5>
@@ -77,7 +74,7 @@ const MatHome = (props) => {
                 </ol>
                 <h5> Contact :</h5>
                 <p style={{ textAlign: 'center' }}><b>Mathieu SCHMITT</b></p>
-                <p style={{ textAlign: 'center' }}> Mail : <a href="mailto:mathieu.schmitt@team-pack.fr">mathieu.schmitt@team-pack.fr</a><br/>Tel: 0669910053
+                <p style={{ textAlign: 'center' }}> Mail : <a href="mailto:mathieu.schmitt@team-pack.fr">mathieu.schmitt@team-pack.fr</a><br />Tel: 0669910053
                 </p>
             </div>
         </>
