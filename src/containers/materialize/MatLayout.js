@@ -11,15 +11,18 @@ import { Navbar, NavItem, Icon, Collection, CollectionItem, Footer } from 'react
 const MatNavbar = ({ theme }) => {
     return (
         <Navbar className={theme} brand={<Logo className="col" style={{ height: "50%" }} />} right>
-            <NavItem href='get-started.html'><Icon color="white">account_circle</Icon></NavItem>
-            <NavItem href='get-started.html'><Icon color="white">more_vert</Icon></NavItem>
+            <NavItem className="disabled"><Icon color="white">account_circle</Icon></NavItem>
+            <NavItem><Icon color="white">more_vert</Icon></NavItem>
+            <NavItem className="hide-on-large-only" href="/"><Icon color="white">home</Icon>Home</NavItem>
+            <NavItem className="hide-on-large-only" href="/chart/"><Icon color="white">bar_chart</Icon>Charts</NavItem>
+            <NavItem className="hide-on-large-only" href="/table/"><Icon color="white">table_chart</Icon>Tables</NavItem>
         </Navbar>
     );
 }
 
 const MatCollection = (props) => {
     return (
-        <Collection className="sidenav-col col m2">
+        <Collection className="sidenav-col col m2 hide-on-med-and-down">
             {/* <CollectionItem className="row blue-grey-text text-darken-3">
                 <Icon className="col">home</Icon>
                 <span><Link style={{ color: 'white' }} to={"/"}>Home</Link></span>
