@@ -129,7 +129,7 @@ class MatLayout extends React.Component {
                 <MatNavbar theme={this.state.theme} />
                 <div className="row">
                     <MatCollection />
-                    <div className="col m10">
+                    <div className="col l10 m12">
                         {this.props.children}
                     </div>
                 </div>

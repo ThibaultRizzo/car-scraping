@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import * as constants from '../../constants';
-import { Row, Button, Table, Pagination } from 'react-materialize'
+import { Icon, Row, Button, Table, Pagination } from 'react-materialize'
 
 export default class MatTable extends React.Component {
     state = {
@@ -80,7 +80,7 @@ export default class MatTable extends React.Component {
                         )
                 }
                 {/* <MatUpload isDiscovered={this.state.isDiscovered} /> */}
-                <Table>
+                <Table style={{ fontSize: '0.8em' }}>
                     <thead>
                         <tr>
                             {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{constants.CAR_LABEL_DICT[key]}</th>)}
@@ -100,6 +100,12 @@ export default class MatTable extends React.Component {
 const CarRow = ({ data = {} }, key) => {
     return (
         <tr key={key}>
-            {Object.values(data).map((val, i) => <td key={key + "-data" + i}>{val}</td>)}
+            {Object.entries(data).map((arr, i) => {
+                switch (arr[0]) {
+                    case 'vendor_link': return <td key={key + "-data" + i}><a href={arr[1]} target="_blank" rel="noopener noreferrer"><Icon color="white">link</Icon></a></td>;
+                    default: return <td key={key + "-data" + i}>{arr[1]}</td>;
+                }
+            })
+            }
         </tr>);
 }
