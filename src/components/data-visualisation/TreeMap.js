@@ -10,7 +10,6 @@ const VendorTreeMap = ({ data, width, height }) => {
     const setTreeColor = (tree) => {
         const getColorOfIndex = (index, nbMax = 1) => `hsla(${index * (255 / nbMax)}, 100%, 50%, 1)`;
         if (tree.children) {
-            // debugger;
             const nbVendors = tree.children.length;
             tree.children.forEach((vendor, index) => {
                 let colorDomain = [0, vendor.value], colorRange = ['white', getColorOfIndex(index, nbVendors)];
@@ -124,13 +123,14 @@ class Leaf extends React.Component {
                     <use xlinkHref={d.leafUid.href}>
                     </use>
                 </clipPath> */}
-                <LeafText maxValue={maxValue} isHovered={this.state.hovered} depth={d.depth} maxDepth={3} text={d.data.name} value={d.data.size || d.value} />
+                <LeafText maxValue={maxValue} isHovered={this.state.hovered} depth={d.depth} maxDepth={3} d={d} text={d.data.name} value={d.data.size || d.value} />
             </g>
         );
     }
 }
 
-const LeafText = ({ isHovered, depth, maxDepth, text, value, maxValue }) => {
+const LeafText = ({ isHovered, depth, maxDepth, text, value, maxValue, d }) => {
+    const canBeDisplayed = (d.x1 - d.x0) > 100;
     const isWorthDisplaying = value / maxValue > 0.005;
     const Value = value ? `(${value})` : '';
     const Text = (size) => {
@@ -143,7 +143,7 @@ const LeafText = ({ isHovered, depth, maxDepth, text, value, maxValue }) => {
             </text >
         );
     }
-    if (isWorthDisplaying && depth < maxDepth && depth > 0) {
+    if (isWorthDisplaying && canBeDisplayed && depth < maxDepth && depth > 0) {
         return depth === 1 ? Text(1) : Text(0.8);
     } else if (isWorthDisplaying && depth === maxDepth && isHovered) {
         return Text(0.6);

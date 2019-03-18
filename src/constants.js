@@ -1,5 +1,11 @@
 /** Configuration constants **/
-export const BASE_URL = 'http://127.0.0.1:8000';
+if (process.env.NODE_ENV === 'development') {
+    export const BASE_URL = 'http://127.0.0.1:8000';
+}
+
+if (process.env.NODE_ENV === 'production') {
+    export const BASE_URL = 'https://team-pack-dev.herokuapp.com';
+}
 export const NUMBERS_URL = BASE_URL + '/carstat/numbers/';
 export const TREEMAP_URL = BASE_URL + '/carstat/treemaps/';
 export const BOXPLOT_URL = BASE_URL + '/carstat/boxplot/';

@@ -61,11 +61,12 @@ const MatCollection = (props) => {
                 disabled
             /> */}
             <MatLink
-                className="item-active row blue-grey-text text-darken-3"
+                className="item-disabled row blue-grey-text text-darken-3"
                 icon="how_to_vote"
                 color="white"
                 path="/scrap/"
                 name="Scrap"
+                disabled
             />
             <MatLink
                 className="item-active row blue-grey-text text-darken-3"
@@ -73,6 +74,7 @@ const MatCollection = (props) => {
                 color="white"
                 path="/settings/"
                 name="Settings"
+                disabled
             />
         </Collection>
     );
