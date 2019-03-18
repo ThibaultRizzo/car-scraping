@@ -6,7 +6,8 @@ import { Row, Button, Table, Pagination } from 'react-materialize'
 export default class MatTable extends React.Component {
     state = {
         data: [],
-        pageNb: 1
+        pageNb: 1,
+        maxPageNb: 10
     }
 
     componentDidMount() {
@@ -17,7 +18,10 @@ export default class MatTable extends React.Component {
         this.setState({ pageNb: pageNb })
         axios.get(constants.PAGINATED_CARS_URL + pageNb)
             .then(res => {
-                this.setState({ data: res.data.results });
+                this.setState({
+                    data: res.data.results,
+                    maxPageNb: Math.floor(res.data.count / res.data.limit)
+                });
             });
     }
 
@@ -56,7 +60,7 @@ export default class MatTable extends React.Component {
                 <h2 className="center-align row">Tables</h2>
                 <Row>
                     <Button className="left-align col m1" type="primary" onClick={this.loadCsv}>Export as CSV</Button>
-                    <Pagination className="right-align offset-s1" items={10} activePage={this.state.page} maxButtons={8} onSelect={num => this.loadData(num)} />
+                    <Pagination className="right-align offset-s1" items={this.state.maxPageNb} activePage={this.state.page} maxButtons={10} onSelect={num => this.loadData(num)} />
                 </Row>
                 <Table>
                     <thead>
