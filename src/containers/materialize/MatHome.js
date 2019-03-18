@@ -19,7 +19,7 @@ const MatHome = (props) => {
                 </ol>
                 <p style={{ textAlign: 'justify' }}>Une telle application s'inscrit dans cette dynamique puisque notre volonté est de vous apporter des chiffres pour votre veille concurrentielle, mais surtout de pouvoir analyser la donnée, pour qu'elle puisse être au service de votre croissance.</p>
                 <p style={{ textAlign: 'justify' }}>L'application n'est qu'un vecteur pour vous aider, au quotidien, à penser plus largement votre stratégie de croissance.</p>
-                <p style={{ textAlign: 'justify' }}>Ainsi nous ne voulons pas créer une application propriétaire, avec les lourdeurs que cela comprend, mais vous proposer une manière innovante et en rupture d'accéder aux données clées dans votre secteur d'activité.</p>
+                <p style={{ textAlign: 'justify' }}>Ainsi nous ne voulons pas créer une application propriétaire, avec les lourdeurs que cela comprend, mais vous proposer une manière innovante et en rupture d'accéder aux données clés dans votre secteur d'activité.</p>
                 <h5>But de l'application :</h5>
                 <p style={{ textAlign: 'justify' }}>Proposer sous une même interface de <b>scraper, afficher, trier et rapporter</b> les données issues de cette veille concurrentielle. L'utilisateur pourra lui même lancer le scrapping des sites, y accéder à tout moment et avoir une vision d'ensemble des concurrents.</p>
                 <h5>Cette version de l'application :</h5>
@@ -42,7 +42,7 @@ const MatHome = (props) => {
                 </ol>
                 <p style={{ textAlign: 'justify' }}><b>NB :</b> Les lenteurs de chargements sont liés au stade de développement bétâ de l'application.</p>
                 <h5> Les développements à venir :</h5>
-                <p>Dans une V2 et une fois la validation des besoins effectuée, nous améliorerons la présente application pour y ajouter les fonctionnalités suivantes. Ces fonctionnalités constituerons les fonctionnalités de base de l'application :</p>
+                <p>Dans une V2 et une fois la validation des besoins effectuée, nous améliorerons la présente application pour y ajouter les fonctionnalités suivantes. Ces fonctionnalités constitueront les fonctionnalités de base de l'application :</p>
                 <ol style={{
                     listStyle: 'square'
                 }}>
@@ -55,14 +55,14 @@ const MatHome = (props) => {
                         <li>Page tableau comprenant les champs principaux préalablement choisi ;</li>
                         <li>Bouton pour lancer le scraping manuellement ;</li>
                         <li>Possibilité de filtrer et trier les données principales directement dans l'application ;</li>
-                        <li>Quelques données d'historique (tendance sur le nombre de voiture scrapée et le prix moyen par rapport au scrapping précédent) ;</li>
+                        <li>Quelques données d'historique (tendance sur le nombre de voitures scrapées et le prix moyen par rapport au scrapping précédent) ;</li>
                         <li>Bouton pour lancer le scraping manuellement ;</li>
                         <li>Gestion d'une DB de 20 000 lignes.</li>
                     </b>
                 </ol>
                 <i>*la fiabilité correspond au taux de voitures scrapées entièrement et intégrant la base de donnée sur le nombre de voitures totales du site (voiture rejetée).</i>
                 <h5> Les options possibles :</h5>
-                <p>L'application sera développée en accord avec les besoins ciblés. Cependant nous avons déjà pensé à quelques options de développement tant sur la partie scraping que sur la partie visualisation de données :</p>
+                <p>L'application sera développée en accord avec les besoins ciblés. Cependant, nous avons déjà pensé à quelques options de développement tant sur la partie scraping que sur la partie visualisation de données :</p>
                 <ol>
                     <li>Augmenter le nombre de sites scrapés (France, Europe) ;</li>
                     <li>Augmenter le nombre de sites scrapés (Zone Monde) ;</li>
@@ -70,7 +70,7 @@ const MatHome = (props) => {
                     <li>Proposer d'autres types de graphiques et d'outils visuels pour améliorer la compréhension de la donnée ;</li>
                     <li><b>Stocker sur un temps donné les données issues du scrapping pour intégrer des facteurs historiques et comparatifs ;</b></li>
                     <li>Augmenter le nombre de données recueillies (ex banque d'images) ;</li>
-                    <li>Proposer des outils d'analyse automatique (voiture la plus vendu, prix moyens ...).</li>
+                    <li>Proposer des outils d'analyse automatique (voiture la plus vendue, prix moyens ...).</li>
                 </ol>
                 <h5> Contact :</h5>
                 <p style={{ textAlign: 'center' }}><b>Mathieu SCHMITT</b></p>
