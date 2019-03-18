@@ -7,13 +7,18 @@ import './TreeMap.scss';
 const VendorTreeMap = ({ data, width, height }) => {
     let node, rootNode;
     node = rootNode = data;
-    const setTreeColor = (tree, maxValue) => {
+    const setTreeColor = (tree) => {
         const getColorOfIndex = (index, nbMax = 1) => `hsla(${index * (255 / nbMax)}, 100%, 50%, 1)`;
         if (tree.children) {
+            // debugger;
             const nbVendors = tree.children.length;
             tree.children.forEach((vendor, index) => {
-                let colorDomain = [0, maxValue], colorRange = ['white', getColorOfIndex(index, nbVendors)];
-                let colorFn = d3.scaleLinear().range(colorRange).domain(colorDomain);
+                let colorDomain = [0, vendor.value], colorRange = ['white', getColorOfIndex(index, nbVendors)];
+                let colorFn = d3.scalePow()
+                    .exponent(0.3)
+                    .domain(colorDomain)
+                    .range(colorRange);
+
                 vendor.color = colorFn(index);
                 setColor(vendor.children, colorFn);
             })
@@ -22,7 +27,7 @@ const VendorTreeMap = ({ data, width, height }) => {
     const setColor = (nodeArray, colorFn) => {
         nodeArray.forEach(node => {
             node.color = colorFn(node.value)
-            console.log(node.color);
+            // console.log(node.color);
             if (node.children) {
                 setColor(node.children, colorFn);
             }
@@ -34,14 +39,15 @@ const VendorTreeMap = ({ data, width, height }) => {
         let treemap = d3.treemap()
             .size([width, height])
             .padding(4)
-            .paddingOuter(10);
+            .paddingOuter(20);
         root
             .sum(d => d.size) // Creates the values of each node
             .sort((a, b) => b.size - a.size); // Creates the hierarchy between each node
         treemap(root);
-        setTreeColor(root, root.height);
+        setTreeColor(root);
+        let maxValue = root.value;
         return root.descendants().map((d, id) =>
-            <Leaf root={rootNode} node={node} maxWidth={width} maxHeight={height} max={root.height} colorIndex={id} key={'leaf' + id} d={d} />
+            <Leaf maxValue={maxValue} root={rootNode} node={node} maxWidth={width} maxHeight={height} max={root.height} colorIndex={id} key={'leaf' + id} d={d} />
         );
     }
 
@@ -101,7 +107,7 @@ class Leaf extends React.Component {
         }, 500);
     };
     render() {
-        const { node, root, d, max, colorIndex, maxWidth, maxHeight, ...props } = this.props;
+        const { node, root, d, max, colorIndex, maxWidth, maxHeight, maxValue, ...props } = this.props;
         return (
             <g transform={`translate(${d.x0},${d.y0})`} {...props} onMouseOver={this.highlight} onMouseOut={this.unhighlight}>
                 {/* <title>`${d.ancestors().reverse().map(d => d.data.name).join("/")}\n${format(d.value)}`</title> */}
@@ -118,25 +124,29 @@ class Leaf extends React.Component {
                     <use xlinkHref={d.leafUid.href}>
                     </use>
                 </clipPath> */}
-                <LeafText isHovered={this.state.hovered} depth={d.depth} maxDepth={3} text={d.data.name} />
+                <LeafText maxValue={maxValue} isHovered={this.state.hovered} depth={d.depth} maxDepth={3} text={d.data.name} value={d.data.size || d.value} />
             </g>
         );
     }
 }
 
-const LeafText = ({ isHovered, depth, maxDepth, text }) => {
-    const Text = (
-        <text dx="4" dy="14">
-            {/* <tspan x="3" y={yText}>Labeler</tspan>
-                    <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
-                     */}
-            {text}
-        </text>
-    );
-    if (depth < maxDepth && depth > 0) {
-        return Text;
-    } else if (depth == maxDepth && isHovered) {
-        return Text;
+const LeafText = ({ isHovered, depth, maxDepth, text, value, maxValue }) => {
+    const isWorthDisplaying = value / maxValue > 0.005;
+    const Value = value ? `(${value})` : '';
+    const Text = (size) => {
+        return (
+            <text dx="4" dy="14" style={{ fontSize: `${size}em` }}>
+                {/* <tspan x="3" y={yText}>Labeler</tspan>
+                        <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
+                         */}
+                {text}{Value}
+            </text >
+        );
+    }
+    if (isWorthDisplaying && depth < maxDepth && depth > 0) {
+        return depth === 1 ? Text(1) : Text(0.8);
+    } else if (isWorthDisplaying && depth === maxDepth && isHovered) {
+        return Text(0.6);
     } else {
         return null;
     };
