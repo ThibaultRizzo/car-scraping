@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.generic import RedirectView
 from .views import ReactAppView
 
 urlpatterns = [
@@ -10,5 +11,7 @@ urlpatterns = [
     path('api/', include('scraping.api.urls')),
     path('carstat/', include('carstatistic.api.urls')),
     path('admin/', admin.site.urls),
+    re_path(r'^favicon\.ico$', RedirectView.as_view(
+        url='/build/favicon.ico', permanent=True)),
     re_path(r'^.*', ReactAppView.as_view()),  # Base URL to load React App
 ]

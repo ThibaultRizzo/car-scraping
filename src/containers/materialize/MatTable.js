@@ -64,6 +64,8 @@ export default class MatTable extends React.Component {
 
     render() {
         const keysList = this.state.data.length > 0 ? Object.getOwnPropertyNames(this.state.data[0]) : [];
+        // Removing columns not wanted
+        const UNWANTED_FIELDS = ['owner_number', 'reg_number', 'reg_date'];
         return (
             <div onClick={this.discover}>
                 <h2 className="center-align row">Tables</h2>
@@ -83,7 +85,7 @@ export default class MatTable extends React.Component {
                 <Table style={{ fontSize: '0.8em' }}>
                     <thead>
                         <tr>
-                            {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{constants.CAR_LABEL_DICT[key]}</th>)}
+                            {keysList.filter(el => !UNWANTED_FIELDS.includes(el)).map((key, i) => <th data-field={key} key={"header" + i}>{constants.CAR_LABEL_DICT[key]}</th>)}
                         </tr>
                     </thead>
 
@@ -103,6 +105,7 @@ const CarRow = ({ data = {} }, key) => {
             {Object.entries(data).map((arr, i) => {
                 switch (arr[0]) {
                     case 'vendor_link': return <td key={key + "-data" + i}><a href={arr[1]} target="_blank" rel="noopener noreferrer"><Icon color="white">link</Icon></a></td>;
+                    case 'owner_number': case 'reg_number': case 'reg_date': return false;
                     default: return <td key={key + "-data" + i}>{arr[1]}</td>;
                 }
             })
