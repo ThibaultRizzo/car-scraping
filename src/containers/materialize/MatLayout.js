@@ -4,13 +4,13 @@ import { Link, withRouter } from 'react-router-dom'
 import { ReactComponent as Logo } from '../../img/logo-Pack-blanc.svg';
 import './MatLayout.scss';
 
-import { Navbar, NavItem, Icon, Collection, CollectionItem } from 'react-materialize'
+import { Navbar, NavItem, Icon, Collection, CollectionItem, Footer } from 'react-materialize'
 
 
-
-const MatNavbar = (props) => {
+// Add theme to context
+const MatNavbar = ({ theme }) => {
     return (
-        <Navbar className="blue-grey darken-3" brand={<Logo className="col" style={{ height: "50%" }} />} right>
+        <Navbar className={theme} brand={<Logo className="col" style={{ height: "50%" }} />} right>
             <NavItem href='get-started.html'><Icon color="white">account_circle</Icon></NavItem>
             <NavItem href='get-started.html'><Icon color="white">more_vert</Icon></NavItem>
         </Navbar>
@@ -106,22 +106,34 @@ const MatLink = ({ icon, color, path, name, active = false, ...props }) => {
     );
 }
 
+const MatFooter = ({ theme }) => {
+    return (
+        <Footer
+            className={theme}
+            copyrights="Copyright Pack. &copy; 2019"
+        >
+            <a href="http://team-pack.fr" target="_blank" rel="noopener noreferrer"><h5 className="white-text">Pack.</h5></a>
+        </Footer>
+    );
+}
+
 
 class MatLayout extends React.Component {
     state = {
-
+        theme: "blue-grey darken-3"
     }
 
     render() {
         return (
             <div>
-                <MatNavbar />
+                <MatNavbar theme={this.state.theme} />
                 <div className="row">
                     <MatCollection />
                     <div className="col m10">
                         {this.props.children}
                     </div>
                 </div>
+                <MatFooter theme={this.state.theme} />
             </div>
         );
     }
