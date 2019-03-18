@@ -68,7 +68,7 @@ export default class MatTable extends React.Component {
             <div onClick={this.discover}>
                 <h2 className="center-align row">Tables</h2>
                 <Row>
-                    <Pagination className="right-align offset-s1" items={this.state.maxPageNb} activePage={this.state.page} maxButtons={10} onSelect={num => this.loadData(num)} />
+                    <Pagination className="center-align right-align offset-s1" items={this.state.maxPageNb} activePage={this.state.page} maxButtons={10} onSelect={num => this.loadData(num)} />
                 </Row>
                 {
                     this.state.isDiscovered
