@@ -22,6 +22,7 @@ const VendorTreeMap = ({ data, width, height }) => {
     const setColor = (nodeArray, colorFn) => {
         nodeArray.forEach(node => {
             node.color = colorFn(node.value)
+            console.log(node.color);
             if (node.children) {
                 setColor(node.children, colorFn);
             }
@@ -95,7 +96,9 @@ class Leaf extends React.Component {
     };
 
     unhighlight = () => {
-        this.setState({ hovered: false });
+        setTimeout(() => {
+            this.setState({ hovered: false });
+        }, 500);
     };
     render() {
         const { node, root, d, max, colorIndex, maxWidth, maxHeight, ...props } = this.props;
@@ -115,16 +118,28 @@ class Leaf extends React.Component {
                     <use xlinkHref={d.leafUid.href}>
                     </use>
                 </clipPath> */}
-                {this.state.hovered &&
-                    <text dx="4" dy="14">
-                        {/* <tspan x="3" y={yText}>Labeler</tspan>
-                    <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
-                     */}
-                        {d.data.name}
-                    </text>}
+                <LeafText isHovered={this.state.hovered} depth={d.depth} maxDepth={3} text={d.data.name} />
             </g>
         );
     }
+}
+
+const LeafText = ({ isHovered, depth, maxDepth, text }) => {
+    const Text = (
+        <text dx="4" dy="14">
+            {/* <tspan x="3" y={yText}>Labeler</tspan>
+                    <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
+                     */}
+            {text}
+        </text>
+    );
+    if (depth < maxDepth && depth > 0) {
+        return Text;
+    } else if (depth == maxDepth && isHovered) {
+        return Text;
+    } else {
+        return null;
+    };
 }
 
 // TreemapLeaf.propTypes = {

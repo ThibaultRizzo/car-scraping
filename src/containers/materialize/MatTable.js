@@ -73,10 +73,10 @@ export default class MatTable extends React.Component {
                 {
                     this.state.isDiscovered
                         ? (
-                            <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3 btn-floating pulse' large style={{ bottom: '45px', right: '24px' }} />
+                            <Button floating onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3 btn-floating pulse' large style={{ position: 'fixed', bottom: '2%', right: '2%' }} />
                         )
                         : (
-                            <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3' large style={{ bottom: '45px', right: '24px' }} />
+                            <Button floating onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3' large style={{ position: 'fixed', bottom: '2%', right: '2%' }} />
                         )
                 }
                 {/* <MatUpload isDiscovered={this.state.isDiscovered} /> */}
