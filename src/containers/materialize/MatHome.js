@@ -33,9 +33,9 @@ const MatHome = (props) => {
                 }}>
                     <li>scraping des sites internet (<i>scraping partiel pour la centrale</i>) :
                     <ol>
-                            <li><a target="_blank" href="https://aramisauto.com/achat/">https://aramisauto.com</a></li>
-                            <li><a target="_blank" href="https://lacentrale.fr">https://lacentrale.fr</a></li>
-                            <li><a target="_blank" href="https://goodbuyauto.it">https://goodbuyauto.it</a></li>
+                            <li><a target="_blank" rel="noopener noreferrer" href="https://aramisauto.com/achat/">https://aramisauto.com</a></li>
+                            <li><a target="_blank" rel="noopener noreferrer" href="https://lacentrale.fr">https://lacentrale.fr</a></li>
+                            <li><a target="_blank" rel="noopener noreferrer" href="https://goodbuyauto.it">https://goodbuyauto.it</a></li>
                         </ol>
                     </li>
                     <li>Gestion de la base de données et data-cleaning des champs principaux ;</li>

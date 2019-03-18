@@ -6,7 +6,8 @@ import { Row, Button, Table, Pagination } from 'react-materialize'
 export default class MatTable extends React.Component {
     state = {
         data: [],
-        pageNb: 1
+        pageNb: 1,
+        maxPageNb: 10
     }
 
     componentDidMount() {
@@ -17,7 +18,10 @@ export default class MatTable extends React.Component {
         this.setState({ pageNb: pageNb })
         axios.get(constants.PAGINATED_CARS_URL + pageNb)
             .then(res => {
-                this.setState({ data: res.data.results });
+                this.setState({
+                    data: res.data.results,
+                    maxPageNb: Math.floor(res.data.count / res.data.limit)
+                });
             });
     }
 
@@ -40,10 +44,11 @@ export default class MatTable extends React.Component {
      * Triggers a download form the browser by adding a link and clicking on it
      */
     downloadCsv = () => {
-        const url = window.URL.createObjectURL(new Blob([this.state.data]));
+        const url = window.URL.createObjectURL(new Blob([this.state.csv]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `car_list_${new Date()}.csv`);
+        const today = new Date();
+        link.setAttribute('download', `car_list_${today.getFullYear()}_${today.getMonth()}_${today.getDate()}.csv`);
         document.body.appendChild(link);
         link.click();
     }
@@ -54,12 +59,12 @@ export default class MatTable extends React.Component {
             <>
                 <h2 className="center-align row">Tables</h2>
                 <Row>
-                    <Pagination className="right-align offset-s1" items={10} activePage={this.state.page} maxButtons={8} onSelect={num => this.loadData(num)} />
+                    <Pagination className="right-align offset-s1" items={this.state.maxPageNb} activePage={this.state.page} maxButtons={10} onSelect={num => this.loadData(num)} />
                 </Row>
                 <Table>
                     <thead>
                         <tr>
-                            {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{key}</th>)}
+                            {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{constants.CAR_LABEL_DICT[key]}</th>)}
                         </tr>
                     </thead>
 

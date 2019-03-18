@@ -8,4 +8,23 @@ export const SCRAPING_URL = BASE_URL + '/api/scrap/';
 export const CAR_CSV_URL = BASE_URL + '/api/cars/get_car_csv/';
 
 /** Display constants **/
-export const TREEMAP_VENDOR_LIST = ['aramisAuto', 'lacentrale', 'goodbuyauto.it'];  
+export const TREEMAP_VENDOR_LIST = ['aramisAuto', 'lacentrale', 'goodbuyauto.it'];
+export const CAR_LABEL_DICT = {
+    "vendor_ref": "Vendor Reference",
+    "price": "Price",
+    "km_number": "Kilometers",
+    "brand": "Brand",
+    "model": "Model",
+    "car_type": "Car Type",
+    "vendor": "Vendor",
+    "reg_date": "Registration Date",
+    "gear_box": "Gear Box",
+    "gear_number": "Gear number",
+    "motor_type": "Motor Type",
+    "petrol_type": "Petrol Type",
+    "color": "Color",
+    "doors_number": "Door Number",
+    "vendor_link": "Link to Vendor",
+    "owner_number": "Owner Number",
+    "reg_number": "Registration Number"
+};
