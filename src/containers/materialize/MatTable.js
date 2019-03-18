@@ -40,10 +40,11 @@ export default class MatTable extends React.Component {
      * Triggers a download form the browser by adding a link and clicking on it
      */
     downloadCsv = () => {
-        const url = window.URL.createObjectURL(new Blob([this.state.data]));
+        const url = window.URL.createObjectURL(new Blob([this.state.csv]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `car_list_${new Date()}.csv`);
+        const today = new Date();
+        link.setAttribute('download', `car_list_${today.getFullYear()}_${today.getMonth()}_${today.getDate()}.csv`);
         document.body.appendChild(link);
         link.click();
     }

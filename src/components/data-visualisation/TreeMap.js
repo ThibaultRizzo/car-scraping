@@ -39,7 +39,9 @@ const VendorTreeMap = ({ data, width, height }) => {
             .sort((a, b) => b.size - a.size); // Creates the hierarchy between each node
         treemap(root);
         setTreeColor(root, root.height);
-        return root.descendants().map((d, id) => <Leaf root={rootNode} node={node} maxWidth={width} maxHeight={height} max={root.height} colorIndex={id} key={'leaf' + id} d={d} />);
+        return root.descendants().map((d, id) =>
+            <Leaf root={rootNode} node={node} maxWidth={width} maxHeight={height} max={root.height} colorIndex={id} key={'leaf' + id} d={d} />
+        );
     }
 
 
@@ -57,7 +59,10 @@ const VendorTreeMap = ({ data, width, height }) => {
 }
 
 
-const Leaf = ({ node, root, d, max, colorIndex, maxWidth, maxHeight, ...props }) => {
+class Leaf extends React.Component {
+    state = {
+        hovered: false
+    };
     // const yText = (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`;
     // const yOpacity = (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null;
 
@@ -84,30 +89,42 @@ const Leaf = ({ node, root, d, max, colorIndex, maxWidth, maxHeight, ...props })
     //     node = d;
     //     d3.event.stopPropagation();
     // }
-    return (
-        <g transform={`translate(${d.x0},${d.y0})`} {...props}>
-            {/* <title>`${d.ancestors().reverse().map(d => d.data.name).join("/")}\n${format(d.value)}`</title> */}
-            <rect
-                // id={`O-leaf-${id}`}
-                fill={d.color}
-                fillOpacity="0.6"
-                width={d.x1 - d.x0}
-                height={d.y1 - d.y0}
-            // onClick={d && zoom(node == d.parent ? root : d.parent)}
 
-            ></rect>
-            {/* <clipPath id={`O-leaf-${id}`}>
-                <use xlinkHref={d.leafUid.href}>
-                </use>
-            </clipPath> */}
-            <text dx="4" dy="14">
-                {/* <tspan x="3" y={yText}>Labeler</tspan>
-                <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
-                 */}
-                {d.data.name}
-            </text>
-        </g>
-    );
+    highlight = () => {
+        this.setState({ hovered: true });
+    };
+
+    unhighlight = () => {
+        this.setState({ hovered: false });
+    };
+    render() {
+        const { node, root, d, max, colorIndex, maxWidth, maxHeight, ...props } = this.props;
+        return (
+            <g transform={`translate(${d.x0},${d.y0})`} {...props} onMouseOver={this.highlight} onMouseOut={this.unhighlight}>
+                {/* <title>`${d.ancestors().reverse().map(d => d.data.name).join("/")}\n${format(d.value)}`</title> */}
+                <rect
+                    // id={`O-leaf-${id}`}
+                    fill={d.color}
+                    fillOpacity="0.6"
+                    width={d.x1 - d.x0}
+                    height={d.y1 - d.y0}
+                // onClick={d && zoom(node == d.parent ? root : d.parent)}
+
+                ></rect>
+                {/* <clipPath id={`O-leaf-${id}`}>
+                    <use xlinkHref={d.leafUid.href}>
+                    </use>
+                </clipPath> */}
+                {this.state.hovered &&
+                    <text dx="4" dy="14">
+                        {/* <tspan x="3" y={yText}>Labeler</tspan>
+                    <tspan x="3" y="2.3000000000000003em" fill-opacity={yOpacity}>{d}</tspan>
+                     */}
+                        {d.data.name}
+                    </text>}
+            </g>
+        );
+    }
 }
 
 // TreemapLeaf.propTypes = {
