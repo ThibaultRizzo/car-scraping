@@ -24,14 +24,14 @@ const MatCollection = (props) => {
                 <Icon className="col">home</Icon>
                 <span><Link style={{ color: 'white' }} to={"/"}>Home</Link></span>
             </CollectionItem> */}
-            {/* <MatLink
+            <MatLink
                 className="row blue-grey-text text-darken-3"
                 icon="home"
                 color="white"
                 path="/"
                 name="Home"
             />
-            <MatLink
+            {/* <MatLink
                 className="item-active row blue-grey-text text-darken-3"
                 icon="airport_shuttle"
                 color="white"

@@ -54,7 +54,6 @@ export default class MatTable extends React.Component {
             <>
                 <h2 className="center-align row">Tables</h2>
                 <Row>
-                    <Button className="left-align col m1" type="primary" onClick={this.loadCsv}>Export as CSV</Button>
                     <Pagination className="right-align offset-s1" items={10} activePage={this.state.page} maxButtons={8} onSelect={num => this.loadData(num)} />
                 </Row>
                 <Table>
@@ -68,6 +67,7 @@ export default class MatTable extends React.Component {
                         {this.state.data.map((el, i) => <CarRow key={"row" + i} data={el} />)}
                     </tbody>
                 </Table>
+                <Button floating fab='vertical' onClick={this.loadCsv} icon='file_download' waves='red' className='text-white blue-grey darken-3' large style={{bottom: '45px', right: '24px'}}/>
             </>
         );
     }
