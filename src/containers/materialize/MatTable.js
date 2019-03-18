@@ -65,7 +65,7 @@ export default class MatTable extends React.Component {
                 <Table>
                     <thead>
                         <tr>
-                            {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{key}</th>)}
+                            {keysList.map((key, i) => <th data-field={key} key={"header" + i}>{constants.CAR_LABEL_DICT[key]}</th>)}
                         </tr>
                     </thead>
 
