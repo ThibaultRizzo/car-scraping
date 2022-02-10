@@ -8,7 +8,7 @@
     "d3": "^5.9.1",
     "material-icons-react": "^1.0.4",
     "materialize-css": "^1.0.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "react": "^16.8.1",
     "react-boxplot": "^3.0.1",
     "react-chartjs-2": "^2.7.4",
